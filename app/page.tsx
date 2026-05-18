@@ -18,7 +18,7 @@ export default function Home() {
             alt="Terra Fieldworks"
             width={406}
             height={18}
-            className="mb-8 block -ml-px"
+            className="mb-8 block ml-[3px]"
           />
           <h1 className="text-5xl lg:text-7xl font-extrabold uppercase tracking-tight leading-none mb-8">
             User Driven.<br />Purpose Built.
@@ -29,9 +29,14 @@ export default function Home() {
           <EmailForm />
         </div>
 
-        {/* Right column: product image placeholder */}
-        <div className="bg-[#111111] flex items-center justify-center min-h-[50vh] lg:min-h-0">
-          <p className="text-[#333333] text-sm uppercase tracking-widest">Product image</p>
+        {/* Right column: product image */}
+        <div className="relative min-h-[50vh] lg:min-h-0 overflow-hidden">
+          <Image
+            src="/Landing%20Page%20Images/LandingImage1.svg"
+            alt="Terra Fieldworks product"
+            fill
+            className="object-cover object-right"
+          />
         </div>
 
       </section>
