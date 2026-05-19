@@ -16,8 +16,9 @@ export default function EmailForm() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     const err = validate(email);
     if (err) {
@@ -25,7 +26,21 @@ export default function EmailForm() {
       return;
     }
     setError(null);
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (submitted) {
@@ -51,13 +66,19 @@ export default function EmailForm() {
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? 'email-error' : undefined}
           autoComplete="email"
-          className="flex-1 min-w-0 bg-transparent border border-white text-white placeholder-[#444444] text-sm uppercase tracking-widest px-4 py-4 focus:outline-none"
+          className="flex-1 min-w-0 bg-transparent border border-white text-white placeholder-[#444444] text-sm uppercase tracking-normal lg:tracking-widest px-3 py-2.5 lg:px-4 lg:py-4 focus:outline-none"
         />
         <button
           type="submit"
-          className="bg-white text-black text-sm font-semibold uppercase tracking-widest px-8 py-4 hover:bg-[#e0e0e0] transition-colors whitespace-nowrap"
+          disabled={loading}
+          className="relative bg-white text-black text-sm font-semibold uppercase tracking-widest px-2 py-2.5 lg:px-8 lg:py-4 hover:bg-[#e0e0e0] transition-colors whitespace-nowrap disabled:opacity-50"
         >
-          Notify Me
+          <span className={loading ? 'invisible' : ''}>Notify Me</span>
+          {loading && (
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            </span>
+          )}
         </button>
       </div>
       {error && (
