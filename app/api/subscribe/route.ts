@@ -10,6 +10,7 @@ export async function POST(request: Request) {
 
     console.log('RESEND_API_KEY present:', !!apiKey);
     console.log('RESEND_AUDIENCE_ID present:', !!audienceId);
+    console.log('All env keys:', Object.keys(env as Record<string, unknown>).join(', '));
 
     const { email } = await request.json();
 
