@@ -3,6 +3,10 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
+    console.log('RESEND_API_KEY present:', !!process.env.RESEND_API_KEY);
+    console.log('RESEND_AUDIENCE_ID present:', !!process.env.RESEND_AUDIENCE_ID);
+    console.log('Available env keys:', Object.keys(process.env).join(', '));
+
     const { email } = await request.json();
 
     if (!email) {
