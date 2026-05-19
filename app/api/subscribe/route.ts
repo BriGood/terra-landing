@@ -1,11 +1,15 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export async function POST(request: Request) {
   try {
-    console.log('RESEND_API_KEY present:', !!process.env.RESEND_API_KEY);
-    console.log('RESEND_AUDIENCE_ID present:', !!process.env.RESEND_AUDIENCE_ID);
-    console.log('Available env keys:', Object.keys(process.env).join(', '));
+    const { env } = await getCloudflareContext({ async: true });
+    const apiKey = (env as Record<string, string>).RESEND_API_KEY;
+    const audienceId = (env as Record<string, string>).RESEND_AUDIENCE_ID;
+
+    console.log('RESEND_API_KEY present:', !!apiKey);
+    console.log('RESEND_AUDIENCE_ID present:', !!audienceId);
 
     const { email } = await request.json();
 
@@ -13,11 +17,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email is required.' }, { status: 400 });
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(apiKey);
 
     const { error } = await resend.contacts.create({
       email,
-      audienceId: process.env.RESEND_AUDIENCE_ID!,
+      audienceId,
       unsubscribed: false,
     });
 
