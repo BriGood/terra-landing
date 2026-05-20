@@ -4,10 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 const images = [
-  '/Landing%20Page%20Images/LandingImage1.svg',
-  '/Landing%20Page%20Images/LandingImage2.svg',
-  '/Landing%20Page%20Images/LandingImage3.svg',
-  '/Landing%20Page%20Images/LandingImage4.svg',
+  '/Landing%20Page%20Images/LandingImage1.png',
+  '/Landing%20Page%20Images/LandingImage2.png',
+  '/Landing%20Page%20Images/LandingImage3.png',
+  '/Landing%20Page%20Images/LandingImage4.png',
 ];
 
 const SLIDE_DURATION = 8000;
