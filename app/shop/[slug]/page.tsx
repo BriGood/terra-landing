@@ -28,7 +28,7 @@ export default async function ProductPage({
 
         {/* Details */}
         <div className="flex flex-col">
-          <h1 className="text-3xl font-extrabold uppercase tracking-tight mb-4">
+          <h1 className="text-3xl font-extrabold uppercase tracking-widest mb-4">
             {product.title}
           </h1>
           <p className="text-2xl font-bold mb-6">{price}</p>
