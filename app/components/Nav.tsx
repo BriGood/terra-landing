@@ -27,6 +27,8 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { itemCount } = useCart();
 
+  if (pathname === '/') return null;
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-[#222]">
       <div className="max-w-screen-xl mx-auto px-3 lg:px-20 h-14 flex items-center justify-between">

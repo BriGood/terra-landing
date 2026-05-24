@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "./components/Nav";
+import NavSpacer from "./components/NavSpacer";
 import { CartProvider } from "./context/CartContext";
 
 const inter = Inter({
@@ -34,7 +35,7 @@ export default function RootLayout({
       <body className="min-h-full bg-black text-white">
         <CartProvider>
           <Nav />
-          <div className="pt-14">{children}</div>
+          <NavSpacer>{children}</NavSpacer>
         </CartProvider>
       </body>
     </html>
