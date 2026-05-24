@@ -25,6 +25,7 @@ export default async function ShopPage() {
                 />
               )}
             </div>
+            <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">Terra Fieldworks</p>
             <h2 className="font-bold uppercase tracking-tight mb-1">{product.title}</h2>
             <p className="text-[#888888]">
               {formatPrice(

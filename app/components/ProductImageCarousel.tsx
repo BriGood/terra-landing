@@ -27,7 +27,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
   }
 
   if (images.length === 0) {
-    return <div className="aspect-square bg-[#111]" />;
+    return <div className="aspect-[4/3] bg-[#111]" />;
   }
 
   const prev = () => setActiveIndex((i) => (i - 1 + images.length) % images.length);
@@ -48,7 +48,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
             {images.map((image, i) => (
               <div
                 key={i}
-                className="relative aspect-square flex-none w-full snap-start bg-[#111] overflow-hidden"
+                className="relative aspect-[4/3] flex-none w-full snap-start bg-[#111] overflow-hidden"
               >
                 <Image
                   src={image.url}
@@ -86,7 +86,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
 
       {/* Desktop: large featured image + thumbnail strip */}
       <div className="hidden md:flex flex-col gap-3">
-        <div className="relative aspect-square bg-[#111] overflow-hidden">
+        <div className="relative aspect-[4/3] bg-[#111] overflow-hidden">
           <Image
             src={images[activeIndex].url}
             alt={images[activeIndex].altText ?? title}
@@ -109,7 +109,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                className={`relative aspect-square w-16 flex-none bg-[#111] overflow-hidden border transition-colors ${
+                className={`relative aspect-[4/3] w-16 flex-none bg-[#111] overflow-hidden border transition-colors ${
                   i === activeIndex ? 'border-white cursor-default' : 'border-transparent hover:border-[#444] cursor-pointer'
                 }`}
                 aria-label={`View image ${i + 1}`}

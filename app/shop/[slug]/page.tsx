@@ -21,14 +21,15 @@ export default async function ProductPage({
   const firstVariant = product.variants[0];
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 pt-8 pb-24 lg:px-20">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <main className="min-h-screen bg-black text-white px-6 pt-8 pb-40 lg:px-20">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
 
         {/* Images */}
         <ProductImageCarousel images={product.images} title={product.title} />
 
         {/* Details */}
         <div className="flex flex-col">
+          <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">Terra Fieldworks</p>
           <h1 className="text-3xl font-extrabold uppercase tracking-widest mb-4">
             {product.title}
           </h1>
@@ -36,7 +37,7 @@ export default async function ProductPage({
 
           {product.descriptionHtml && (
             <div
-              className="text-[#888888] mb-8 leading-relaxed [&_p]:mb-4 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4"
+              className="text-[#888888] mb-8 leading-snug [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2"
               dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
             />
           )}
