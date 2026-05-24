@@ -4,13 +4,20 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export async function POST(request: Request) {
   try {
-    const { env } = await getCloudflareContext({ async: true });
-    const apiKey = (env as Record<string, string>).RESEND_API_KEY;
-    const audienceId = (env as Record<string, string>).RESEND_AUDIENCE_ID;
+    let apiKey: string;
+    let audienceId: string;
+
+    try {
+      const { env } = await getCloudflareContext({ async: true });
+      apiKey = (env as Record<string, string>).RESEND_API_KEY;
+      audienceId = (env as Record<string, string>).RESEND_AUDIENCE_ID;
+    } catch {
+      apiKey = process.env.RESEND_API_KEY ?? '';
+      audienceId = process.env.RESEND_AUDIENCE_ID ?? '';
+    }
 
     console.log('RESEND_API_KEY present:', !!apiKey);
     console.log('RESEND_AUDIENCE_ID present:', !!audienceId);
-    console.log('All env keys:', Object.keys(env as Record<string, unknown>).join(', '));
 
     const { email } = await request.json();
 
