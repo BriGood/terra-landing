@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getProduct, formatPrice } from '@/lib/shopify';
 import ProductImageCarousel from '@/app/components/ProductImageCarousel';
+import AddToCart from '@/app/components/AddToCart';
 
 export default async function ProductPage({
   params,
@@ -40,31 +41,11 @@ export default async function ProductPage({
             />
           )}
 
-          {/* Variant selector */}
-          {product.variants.length > 1 && (
-            <div className="mb-6">
-              <p className="text-sm uppercase tracking-widest mb-3">Options</p>
-              <div className="flex flex-wrap gap-2">
-                {product.variants.map((variant) => (
-                  <button
-                    key={variant.id}
-                    disabled={!variant.availableForSale}
-                    className="px-4 py-2 border border-white text-sm uppercase tracking-wide disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white hover:text-black transition-colors"
-                  >
-                    {variant.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Buy button */}
-          <a
-            href={`https://${process.env.SHOPIFY_STORE_DOMAIN}/cart/${firstVariant?.id.split('/').pop()}:1`}
-            className="bg-white text-black text-sm font-bold uppercase tracking-widest px-8 py-4 text-center hover:bg-[#ccc] transition-colors"
-          >
-            {firstVariant?.availableForSale ? 'Buy Now' : 'Sold Out'}
-          </a>
+          <AddToCart
+            merchandiseId={firstVariant?.id ?? ''}
+            availableForSale={firstVariant?.availableForSale ?? false}
+            checkoutUrl={`https://${process.env.SHOPIFY_STORE_DOMAIN}/cart/${firstVariant?.id.split('/').pop()}:1`}
+          />
         </div>
 
       </div>

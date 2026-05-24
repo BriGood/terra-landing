@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useCart } from '@/app/context/CartContext';
 
 const links = [
   { href: '/', label: 'HØme' },
@@ -24,6 +25,7 @@ function CartIcon() {
 export default function Nav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { itemCount } = useCart();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-[#222]">
@@ -73,19 +75,29 @@ export default function Nav() {
           ))}
           <Link
             href="/cart"
-            className={`transition-colors ${
+            className={`relative transition-colors ${
               pathname === '/cart' ? 'text-white' : 'text-[#888888] hover:text-white'
             }`}
             aria-label="Cart"
           >
             <CartIcon />
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                {itemCount}
+              </span>
+            )}
           </Link>
         </div>
 
         {/* Mobile: cart + hamburger */}
         <div className="md:hidden flex items-center gap-4">
-          <Link href="/cart" className="text-[#888888]" aria-label="Cart">
+          <Link href="/cart" className="relative text-[#888888]" aria-label="Cart">
             <CartIcon />
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                {itemCount}
+              </span>
+            )}
           </Link>
           <button
             className="text-white text-xl leading-none"
