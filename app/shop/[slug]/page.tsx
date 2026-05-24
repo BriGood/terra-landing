@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getProduct, formatPrice } from '@/lib/shopify';
 import ProductImageCarousel from '@/app/components/ProductImageCarousel';
 import AddToCart from '@/app/components/AddToCart';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export default async function ProductPage({
   params,
@@ -22,6 +23,9 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-black text-white px-6 pt-8 pb-40 lg:px-20">
+      <div className="max-w-5xl mx-auto">
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
+      </div>
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
 
         {/* Images */}
