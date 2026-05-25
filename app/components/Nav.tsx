@@ -42,6 +42,14 @@ export default function Nav() {
             height={40}
             className="block"
           />
+          {/* Mobile stacked wordmark */}
+          <Image
+            src="/Branding/Terra_Stacked%20Text%20Only.svg"
+            alt=""
+            width={120}
+            height={60}
+            className="block md:hidden"
+          />
           {/* Desktop wordmark */}
           <Image
             src="/Branding/Terra_Text%20Only.svg"
