@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useCart } from '@/app/context/CartContext';
 
 const links = [
-  { href: '/', label: 'HØme' },
+  { href: '/home', label: 'HØme' },
   { href: '/shop', label: 'ShØp' },
   { href: '/about', label: 'AbØut' },
 ];
