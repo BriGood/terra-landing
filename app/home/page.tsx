@@ -8,38 +8,23 @@ export default async function HomePage() {
   return (
     <main className="bg-black text-white">
 
-      {/* Hero */}
-      <section className="min-h-[60vh] grid grid-cols-1 lg:grid-cols-2">
-
-        {/* Left: text + CTA */}
-        <div className="flex flex-col items-start justify-start lg:justify-center px-6 pt-8 pb-10 lg:py-24 lg:px-20 order-last lg:order-first">
-          <h1 className="text-4xl lg:text-7xl font-extrabold uppercase tracking-tight leading-none mb-6">
-            <span className="block mb-2">User Driven.</span>
+      {/* Hero — full-width banner with text overlay */}
+      <section className="relative w-full h-[15vh] lg:h-[42vh] overflow-hidden">
+        <Image
+          src="/Landing%20Page%20Images/BannerImage3.png"
+          alt="Terra Fieldworks"
+          fill
+          className="object-cover object-[center_85%]"
+          priority
+        />
+        <div className="absolute inset-0 flex items-center px-6 lg:px-20">
+          <h1 className="text-[1.875rem] lg:text-[8rem] font-extrabold uppercase tracking-tight leading-none">
+            <span className="block">User Driven.</span>
             <span className="block">Purpose Built.</span>
           </h1>
-          <p className="text-[#888888] text-lg mb-10 max-w-sm">
-            Innovative tools, gear, and everyday carry — engineered for the field.
-          </p>
-          <Link
-            href="/shop"
-            className="bg-white text-black text-sm font-bold uppercase tracking-widest px-8 py-4 hover:bg-[#ccc] transition-colors"
-          >
-            Shop Now
-          </Link>
         </div>
-
-        {/* Right: hero slideshow */}
-        <div className="relative min-h-[26vh] lg:min-h-0 overflow-hidden order-first lg:order-last">
-          <Image
-            src="/Landing%20Page%20Images/LandingImage2.png"
-            alt="Terra Fieldworks"
-            fill
-            className="object-cover object-right-bottom"
-            priority
-          />
-        </div>
-
       </section>
+
 
       {/* Featured Products */}
       {products.length > 0 && (
