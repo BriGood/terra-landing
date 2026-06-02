@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, formatPrice } from '@/lib/shopify';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const products = await getProducts();
 

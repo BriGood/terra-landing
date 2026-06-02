@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getProducts, formatPrice } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ShopPage() {
   const products = await getProducts();
 
