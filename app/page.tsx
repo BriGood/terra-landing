@@ -33,7 +33,7 @@ export default function Home() {
         </div>
 
         {/* Right column: product image — first on mobile, second on desktop */}
-        <div className="relative min-h-[29vh] lg:min-h-0 overflow-hidden order-first lg:order-last">
+        <div className="relative min-h-[29vh] lg:min-h-0 overflow-hidden order-first lg:order-last bg-black">
           <HeroSlideshow />
           <div className="absolute top-6 right-6 z-10">
             <Image

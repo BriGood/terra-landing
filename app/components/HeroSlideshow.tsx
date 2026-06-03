@@ -4,10 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 const images = [
-  '/Landing%20Page%20Images/LandingImage1.png',
-  '/Landing%20Page%20Images/LandingImage2.png',
-  '/Landing%20Page%20Images/LandingImage3.png',
-  '/Landing%20Page%20Images/LandingImage4.png',
+  { src: '/Branding/LandingImage1.jpg', className: 'object-cover object-center' },
+  { src: '/Branding/LandingImage2.jpg', className: 'object-cover object-right-bottom' },
+  { src: '/Branding/LandingImage3.jpg', className: 'object-cover object-right-bottom' },
+  { src: '/Branding/LandingImage4.jpg', className: 'object-cover object-right-bottom' },
 ];
 
 const SLIDE_DURATION = 8000;
@@ -55,9 +55,9 @@ export default function HeroSlideshow() {
 
   return (
     <>
-      {images.map((src, i) => (
+      {images.map((image, i) => (
         <div
-          key={src}
+          key={image.src}
           className={`absolute inset-0 transition-opacity duration-[4000ms] ${
             i === current ? 'opacity-100' : 'opacity-0'
           }`}
@@ -67,11 +67,11 @@ export default function HeroSlideshow() {
             className="absolute inset-0"
           >
             <Image
-              src={src}
+              src={image.src}
               alt="Terra Fieldworks product"
               fill
               priority={i === 0}
-              className="object-cover object-right-bottom"
+              className={image.className}
             />
           </div>
         </div>
