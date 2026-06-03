@@ -11,12 +11,12 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[15vh] lg:h-[42vh] overflow-hidden">
+      <section className="relative w-full h-[12vh] lg:h-[34vh] overflow-hidden">
         <Image
-          src="/Landing%20Page%20Images/BannerImage3.png"
+          src="/Branding/HomeBanner.jpg"
           alt="Terra Fieldworks"
           fill
-          className="object-cover object-[center_85%]"
+          className="object-cover object-[center_40%]"
           priority
         />
         <div className="absolute inset-0 flex items-center px-6 lg:px-20">
