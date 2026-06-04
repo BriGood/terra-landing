@@ -10,6 +10,12 @@ export type ProductListItem = {
       currencyCode: string;
     };
   };
+  compareAtPriceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  } | null;
   featuredImage: {
     url: string;
     altText: string | null;
@@ -23,6 +29,10 @@ export type ProductVariant = {
     amount: string;
     currencyCode: string;
   };
+  compareAtPrice: {
+    amount: string;
+    currencyCode: string;
+  } | null;
   availableForSale: boolean;
 };
 
@@ -60,6 +70,12 @@ export async function getProducts(): Promise<ProductListItem[]> {
           title
           handle
           priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
             minVariantPrice {
               amount
               currencyCode
@@ -106,6 +122,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
             id
             title
             price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
               amount
               currencyCode
             }

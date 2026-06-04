@@ -2,14 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '@/app/context/CartContext';
+import ExpressCheckout from './ExpressCheckout';
 
 type Props = {
   merchandiseId: string;
   availableForSale: boolean;
   checkoutUrl: string;
+  storeDomain: string;
 };
 
-export default function AddToCart({ merchandiseId, availableForSale, checkoutUrl }: Props) {
+export default function AddToCart({ merchandiseId, availableForSale, checkoutUrl, storeDomain }: Props) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
@@ -70,12 +72,11 @@ export default function AddToCart({ merchandiseId, availableForSale, checkoutUrl
           </button>
         </div>
 
-        <a
-          href={checkoutUrl}
-          className="w-full bg-white text-black text-sm font-bold uppercase tracking-widest py-4 text-center hover:bg-[#ccc] transition-colors"
-        >
-          Buy Now
-        </a>
+        <ExpressCheckout
+          variantId={merchandiseId.split('/').pop() ?? ''}
+          storeDomain={storeDomain}
+          checkoutUrl={checkoutUrl}
+        />
       </div>
 
       {/* Sticky bar */}

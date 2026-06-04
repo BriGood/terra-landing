@@ -102,7 +102,7 @@ export default function Nav() {
             )}
           </Link>
           <button
-            className="text-white text-[28px] leading-none"
+            className="text-white text-[28px] leading-none w-8 flex items-center justify-center"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >

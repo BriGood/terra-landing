@@ -4,7 +4,7 @@ type Crumb = { label: string; href?: string };
 
 export default function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
   return (
-    <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#555] mb-6">
+    <nav className="fixed top-16 left-0 right-0 z-40 bg-black flex items-center gap-2 text-xs uppercase tracking-widest text-[#555] px-6 lg:px-20 py-2 border-b border-[#222]">
       {crumbs.map((crumb, i) => (
         <span key={i} className="flex items-center gap-2">
           {i > 0 && <span>/</span>}

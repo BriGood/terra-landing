@@ -40,7 +40,7 @@ export default async function HomePage() {
               View All →
             </Link>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
             {products.map((product) => (
               <Link
                 key={product.id}
@@ -59,12 +59,24 @@ export default async function HomePage() {
                 </div>
                 <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">Terra Fieldworks</p>
                 <h3 className="font-bold uppercase tracking-tight mb-1">{product.title}</h3>
-                <p className="text-[#888888]">
-                  {formatPrice(
-                    product.priceRange.minVariantPrice.amount,
-                    product.priceRange.minVariantPrice.currencyCode
+                <div className="flex items-center gap-2">
+                  <p className="text-white">
+                    {formatPrice(
+                      product.priceRange.minVariantPrice.amount,
+                      product.priceRange.minVariantPrice.currencyCode
+                    )}
+                  </p>
+                  {product.compareAtPriceRange?.minVariantPrice &&
+                    parseFloat(product.compareAtPriceRange.minVariantPrice.amount) >
+                    parseFloat(product.priceRange.minVariantPrice.amount) && (
+                    <p className="text-[#888888] line-through text-sm">
+                      {formatPrice(
+                        product.compareAtPriceRange.minVariantPrice.amount,
+                        product.compareAtPriceRange.minVariantPrice.currencyCode
+                      )}
+                    </p>
                   )}
-                </p>
+                </div>
               </Link>
             ))}
           </div>
