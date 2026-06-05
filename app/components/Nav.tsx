@@ -124,6 +124,15 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
           </Link>
 
           <Link
+            href="/contact"
+            className={`text-xs uppercase tracking-widest transition-colors ${
+              pathname === '/contact' ? 'text-white' : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            CØntact
+          </Link>
+
+          <Link
             href="/cart"
             className={`relative transition-colors ${
               pathname === '/cart' ? 'text-white' : 'text-[#888888] hover:text-white'
@@ -192,6 +201,13 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
             onClick={() => setMobileOpen(false)}
           >
             AbØut
+          </Link>
+          <Link
+            href="/contact"
+            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+            onClick={() => setMobileOpen(false)}
+          >
+            CØntact
           </Link>
         </div>
       )}

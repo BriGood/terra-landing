@@ -4,6 +4,7 @@ export type ProductListItem = {
   id: string;
   title: string;
   handle: string;
+  vendor: string;
   priceRange: {
     minVariantPrice: {
       amount: string;
@@ -40,6 +41,7 @@ export type Product = {
   id: string;
   title: string;
   handle: string;
+  vendor: string;
   description: string;
   descriptionHtml: string;
   images: { url: string; altText: string | null }[];
@@ -83,6 +85,7 @@ export async function getProducts(): Promise<ProductListItem[]> {
           id
           title
           handle
+          vendor
           priceRange {
             minVariantPrice {
               amount
@@ -117,6 +120,7 @@ export async function getProduct(handle: string): Promise<Product | null> {
         id
         title
         handle
+        vendor
         description
         descriptionHtml
         priceRange {
@@ -336,6 +340,7 @@ export async function getCollection(handle: string): Promise<Collection | null> 
             id
             title
             handle
+            vendor
             priceRange {
               minVariantPrice { amount currencyCode }
             }
@@ -356,6 +361,35 @@ export async function getCollection(handle: string): Promise<Collection | null> 
     ...data.collection,
     products: data.collection.products.nodes,
   };
+}
+
+export type ShopPolicy = {
+  title: string;
+  body: string;
+  handle: string;
+};
+
+export async function getPolicy(handle: string): Promise<ShopPolicy | null> {
+  const client = getClient();
+  const { data, errors } = await client.request(`
+    {
+      shop {
+        privacyPolicy { title body handle }
+        termsOfService { title body handle }
+        refundPolicy { title body handle }
+        shippingPolicy { title body handle }
+      }
+    }
+  `);
+  if (errors) return null;
+  const { shop } = data;
+  const all: (ShopPolicy | null)[] = [
+    shop.privacyPolicy,
+    shop.termsOfService,
+    shop.refundPolicy,
+    shop.shippingPolicy,
+  ];
+  return all.filter(Boolean).find((p) => p!.handle === handle) ?? null;
 }
 
 export function formatPrice(amount: string, currencyCode: string): string {

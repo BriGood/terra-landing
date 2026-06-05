@@ -13,6 +13,19 @@ body {
   color: #ffffff;
 }
 
+.policy-body h1, .policy-body h2, .policy-body h3 {
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.policy-body p { margin-bottom: 1rem; }
+.policy-body ul, .policy-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+.policy-body li { margin-bottom: 0.25rem; }
+.policy-body a { color: #ffffff; text-decoration: underline; }
+
 @keyframes kenburns {
   0%   { transform: scale(1.04) translate(0,    0);     }
   100% { transform: scale(1.1)  translate(-1%, -0.5%); }

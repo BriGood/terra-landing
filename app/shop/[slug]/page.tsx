@@ -33,7 +33,7 @@ export default async function ProductPage({
 
         {/* Details */}
         <div className="flex flex-col">
-          <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">Terra Fieldworks</p>
+          <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
           <h1 className="text-3xl font-extrabold uppercase tracking-widest mb-4">
             {product.title}
           </h1>

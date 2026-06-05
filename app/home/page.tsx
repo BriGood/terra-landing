@@ -57,7 +57,7 @@ export default async function HomePage() {
                     />
                   )}
                 </div>
-                <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">Terra Fieldworks</p>
+                <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
                 <h3 className="font-bold uppercase tracking-tight mb-1">{product.title}</h3>
                 <div className="flex items-center gap-2">
                   <p className="text-white">
