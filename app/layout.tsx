@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "./components/Nav";
 import NavSpacer from "./components/NavSpacer";
+import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { getCollections } from "@/lib/shopify";
 
@@ -39,6 +40,7 @@ export default async function RootLayout({
         <CartProvider>
           <Nav collections={collections} />
           <NavSpacer>{children}</NavSpacer>
+          <Footer />
         </CartProvider>
       </body>
     </html>
