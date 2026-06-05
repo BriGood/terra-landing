@@ -11,7 +11,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[12vh] lg:h-[34vh] overflow-hidden">
+      <section className="relative w-full h-[25vh] lg:h-[34vh] overflow-hidden">
         <Image
           src="/Branding/HomeBanner.jpg"
           alt="Terra Fieldworks"
@@ -20,7 +20,7 @@ export default async function HomePage() {
           priority
         />
         <div className="absolute inset-0 flex items-center px-6 lg:px-20">
-          <h1 className="text-[1.875rem] lg:text-[8rem] font-extrabold uppercase tracking-tight leading-none">
+          <h1 className="text-[2.5rem] lg:text-[8rem] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">User Driven.</span>
             <span className="block">Purpose Built.</span>
           </h1>

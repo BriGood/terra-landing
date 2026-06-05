@@ -52,6 +52,20 @@ export type Product = {
   variants: ProductVariant[];
 };
 
+export type CollectionListItem = {
+  id: string;
+  title: string;
+  handle: string;
+};
+
+export type Collection = {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  products: ProductListItem[];
+};
+
 function getClient() {
   return createStorefrontApiClient({
     storeDomain: process.env.SHOPIFY_STORE_DOMAIN!,
@@ -284,6 +298,64 @@ export async function getCart(cartId: string): Promise<Cart | null> {
   if (errors) throw new Error(errors.message);
   if (!data.cart) return null;
   return parseCart(data.cart);
+}
+
+export async function getCollections(): Promise<CollectionListItem[]> {
+  try {
+    const client = getClient();
+    const { data, errors } = await client.request(`
+      {
+        collections(first: 20) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
+      }
+    `);
+    if (errors) return [];
+    return data.collections.nodes;
+  } catch {
+    return [];
+  }
+}
+
+export async function getCollection(handle: string): Promise<Collection | null> {
+  const client = getClient();
+  const { data, errors } = await client.request(
+    `
+    query Collection($handle: String!) {
+      collection(handle: $handle) {
+        id
+        title
+        handle
+        description
+        products(first: 50) {
+          nodes {
+            id
+            title
+            handle
+            priceRange {
+              minVariantPrice { amount currencyCode }
+            }
+            compareAtPriceRange {
+              minVariantPrice { amount currencyCode }
+            }
+            featuredImage { url altText }
+          }
+        }
+      }
+    }
+  `,
+    { variables: { handle } }
+  );
+  if (errors) throw new Error(errors.message);
+  if (!data.collection) return null;
+  return {
+    ...data.collection,
+    products: data.collection.products.nodes,
+  };
 }
 
 export function formatPrice(amount: string, currencyCode: string): string {

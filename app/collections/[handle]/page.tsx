@@ -1,19 +1,30 @@
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProducts, formatPrice } from '@/lib/shopify';
+import { getCollection, formatPrice } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ShopPage() {
-  const products = await getProducts();
+export default async function CollectionPage({
+  params,
+}: {
+  params: Promise<{ handle: string }>;
+}) {
+  const { handle } = await params;
+  const collection = await getCollection(handle);
+
+  if (!collection) notFound();
 
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp' }]} />
-      <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">ShØp</h1>
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
-        {products.map((product) => (
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'ShØp', href: '/shop' }, { label: collection.title }]} />
+      <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-2">{collection.title}</h1>
+      {collection.description && (
+        <p className="text-[#888888] mb-12">{collection.description}</p>
+      )}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+        {collection.products.map((product) => (
           <Link
             key={product.id}
             href={`/shop/${product.handle}`}

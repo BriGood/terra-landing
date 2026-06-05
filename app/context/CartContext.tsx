@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { Cart, createCart, addCartLine, updateCartLine, removeCartLine, getCart } from '@/lib/shopify';
+import { Cart } from '@/lib/shopify';
 
 type CartContextType = {
   cart: Cart | null;
@@ -15,6 +15,17 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | null>(null);
 
+async function cartFetch(action: string, params: Record<string, unknown>): Promise<Cart> {
+  const res = await fetch('/api/cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, ...params }),
+  });
+  const { cart, error } = await res.json();
+  if (error) throw new Error(error);
+  return cart;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,10 +33,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const cartId = localStorage.getItem('shopify_cart_id');
     if (cartId) {
-      getCart(cartId).then((c) => {
-        if (c) setCart(c);
-        else localStorage.removeItem('shopify_cart_id');
-      });
+      fetch(`/api/cart?cartId=${encodeURIComponent(cartId)}`)
+        .then((r) => r.json())
+        .then(({ cart: c }) => {
+          if (c) setCart(c);
+          else localStorage.removeItem('shopify_cart_id');
+        });
     }
   }, []);
 
@@ -35,9 +48,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const cartId = localStorage.getItem('shopify_cart_id');
       let updated: Cart;
       if (cartId) {
-        updated = await addCartLine(cartId, merchandiseId, quantity);
+        updated = await cartFetch('add', { cartId, merchandiseId, quantity });
       } else {
-        updated = await createCart(merchandiseId, quantity);
+        updated = await cartFetch('create', { merchandiseId, quantity });
         localStorage.setItem('shopify_cart_id', updated.id);
       }
       setCart(updated);
@@ -50,7 +63,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!cart) return;
     setLoading(true);
     try {
-      const updated = await updateCartLine(cart.id, lineId, quantity);
+      const updated = await cartFetch('update', { cartId: cart.id, lineId, quantity });
       setCart(updated);
     } finally {
       setLoading(false);
@@ -61,7 +74,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!cart) return;
     setLoading(true);
     try {
-      const updated = await removeCartLine(cart.id, lineId);
+      const updated = await cartFetch('remove', { cartId: cart.id, lineId });
       setCart(updated);
     } finally {
       setLoading(false);

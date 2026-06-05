@@ -4,13 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/context/CartContext';
 import { formatPrice } from '@/lib/shopify';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export default function CartPage() {
   const { cart, itemCount, loading, updateQuantity, removeItem, checkoutUrl } = useCart();
 
   if (itemCount === 0) {
     return (
-      <main className="min-h-screen bg-black text-white px-6 pt-8 pb-24 lg:px-20">
+      <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'Cart' }]} />
         <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">Cart</h1>
         <p className="text-[#888888] mb-6">Your cart is empty.</p>
         <Link
@@ -24,7 +26,8 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 pt-8 pb-24 lg:px-20">
+    <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'Cart' }]} />
       <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">Cart</h1>
 
       <div className="max-w-3xl flex flex-col gap-8">

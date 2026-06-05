@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "./components/Nav";
 import NavSpacer from "./components/NavSpacer";
 import { CartProvider } from "./context/CartContext";
+import { getCollections } from "@/lib/shopify";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,16 +26,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const collections = await getCollections();
+
   return (
     <html lang="en" className={`${inter.className} h-full antialiased`}>
       <body className="min-h-full bg-black text-white">
         <CartProvider>
-          <Nav />
+          <Nav collections={collections} />
           <NavSpacer>{children}</NavSpacer>
         </CartProvider>
       </body>

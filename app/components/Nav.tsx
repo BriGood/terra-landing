@@ -5,12 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useCart } from '@/app/context/CartContext';
-
-const links = [
-  { href: '/home', label: 'HØme' },
-  { href: '/shop', label: 'ShØp' },
-  { href: '/about', label: 'AbØut' },
-];
+import type { CollectionListItem } from '@/lib/shopify';
 
 function CartIcon() {
   return (
@@ -22,15 +17,22 @@ function CartIcon() {
   );
 }
 
-export default function Nav() {
+export default function Nav({ collections = [] }: { collections?: CollectionListItem[] }) {
+  const sortedCollections = [...collections].sort((a, b) => a.title.localeCompare(b.title));
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
   const { itemCount } = useCart();
 
   if (pathname === '/') return null;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-[#222]">
+      {/* Announcement bar */}
+      <div className="h-8 flex items-center justify-center border-b border-[#222]">
+        <p className="text-xs uppercase tracking-widest text-[#888888]">Free shipping on orders over $50</p>
+      </div>
+
       <div className="px-3 lg:px-20 h-16 flex items-center justify-between">
 
         {/* Logo */}
@@ -42,7 +44,6 @@ export default function Nav() {
             height={40}
             className="block"
           />
-          {/* Mobile stacked wordmark */}
           <Image
             src="/Branding/Terra_Stacked%20Text%20Only.svg"
             alt=""
@@ -50,7 +51,6 @@ export default function Nav() {
             height={60}
             className="block md:hidden"
           />
-          {/* Desktop wordmark */}
           <Image
             src="/Branding/Terra_Text%20Only.svg"
             alt=""
@@ -62,19 +62,67 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
+          <Link
+            href="/home"
+            className={`text-xs uppercase tracking-widest transition-colors ${
+              pathname === '/home' ? 'text-white' : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            HØme
+          </Link>
+
+          {/* ShØp with dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setShopOpen(true)}
+            onMouseLeave={() => setShopOpen(false)}
+          >
             <Link
-              key={link.href}
-              href={link.href}
+              href="/shop"
               className={`text-xs uppercase tracking-widest transition-colors ${
-                pathname === link.href
+                pathname.startsWith('/shop') || pathname.startsWith('/collections')
                   ? 'text-white'
                   : 'text-[#888888] hover:text-white'
               }`}
             >
-              {link.label}
+              ShØp
             </Link>
-          ))}
+
+            {shopOpen && collections.length > 0 && (
+              <div className="absolute top-full left-0 pt-4 w-48">
+                <div className="bg-black border border-[#222] py-2">
+                  <Link
+                    href="/shop"
+                    className="block px-4 py-2 text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+                  >
+                    All Products
+                  </Link>
+                  <div className="border-t border-[#222] my-1" />
+                  {sortedCollections.map((c) => (
+                    <Link
+                      key={c.id}
+                      href={`/collections/${c.handle}`}
+                      className={`block px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
+                        pathname === `/collections/${c.handle}` ? 'text-white' : 'text-[#888888] hover:text-white'
+                      }`}
+                    >
+                      {c.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <Link
+            href="/about"
+            className={`text-xs uppercase tracking-widest transition-colors ${
+              pathname === '/about' ? 'text-white' : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            AbØut
+          </Link>
+
           <Link
             href="/cart"
             className={`relative transition-colors ${
@@ -113,17 +161,38 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-black border-t border-[#222] px-6 py-6 flex flex-col gap-6">
-          {links.map((link) => (
+        <div className="md:hidden bg-black border-t border-[#222] px-6 py-6 flex flex-col gap-4">
+          <Link
+            href="/home"
+            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+            onClick={() => setMobileOpen(false)}
+          >
+            HØme
+          </Link>
+          <Link
+            href="/shop"
+            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+            onClick={() => setMobileOpen(false)}
+          >
+            ShØp
+          </Link>
+          {sortedCollections.map((c) => (
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+              key={c.id}
+              href={`/collections/${c.handle}`}
+              className="text-xs uppercase tracking-widest text-[#555] hover:text-white transition-colors pl-3"
               onClick={() => setMobileOpen(false)}
             >
-              {link.label}
+              {c.title}
             </Link>
           ))}
+          <Link
+            href="/about"
+            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+            onClick={() => setMobileOpen(false)}
+          >
+            AbØut
+          </Link>
         </div>
       )}
     </nav>

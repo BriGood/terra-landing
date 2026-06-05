@@ -22,7 +22,7 @@ export default async function ProductPage({
       : null;
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 pt-16 pb-40 lg:px-20">
+    <main className="min-h-screen bg-black text-white px-6 pt-14 pb-40 lg:px-20">
       <div className="max-w-5xl mx-auto">
       <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
       </div>
