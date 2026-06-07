@@ -18,6 +18,7 @@ export default async function HomePage() {
           fill
           className="object-cover object-[center_40%]"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 flex items-center px-6 lg:px-20">
           <h1 className="text-[2.5rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
