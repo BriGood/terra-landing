@@ -30,7 +30,7 @@ export default function AboutPage() {
           <p className="text-xs uppercase tracking-widest text-[#888888] mb-4">Our Promise</p>
           <h2 className="text-2xl font-extrabold uppercase tracking-tight mb-4">Lifetime Guarantee</h2>
           <p className="text-[#888888] leading-relaxed">
-            Every Terra Fieldworks product is backed by a lifetime guarantee. If anything goes wrong, even if it&apos;s your fault, we&apos;ll make it right. No questions asked. We stand behind what we build.
+            Every original Terra Fieldworks product is backed by a lifetime guarantee. If anything goes wrong, even if it&apos;s your fault, we&apos;ll make it right. We stand behind what we build.
           </p>
         </div>
 

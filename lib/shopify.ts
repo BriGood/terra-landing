@@ -37,6 +37,13 @@ export type ProductVariant = {
   availableForSale: boolean;
 };
 
+export type ProductSpecs = {
+  dimensions: string | null;
+  material: string | null;
+  weight: string | null;
+  origin: string | null;
+};
+
 export type Product = {
   id: string;
   title: string;
@@ -52,6 +59,7 @@ export type Product = {
     };
   };
   variants: ProductVariant[];
+  specs: ProductSpecs;
 };
 
 export type CollectionListItem = {
@@ -150,6 +158,15 @@ export async function getProduct(handle: string): Promise<Product | null> {
             availableForSale
           }
         }
+        metafields(identifiers: [
+          { namespace: "custom", key: "dimensions" },
+          { namespace: "custom", key: "material" },
+          { namespace: "custom", key: "weight" },
+          { namespace: "custom", key: "origin" }
+        ]) {
+          key
+          value
+        }
       }
     }
   `,
@@ -159,10 +176,19 @@ export async function getProduct(handle: string): Promise<Product | null> {
   if (errors) throw new Error(errors.message);
   if (!data.product) return null;
 
+  const metafields: { key: string; value: string }[] = data.product.metafields?.filter(Boolean) ?? [];
+  const getMeta = (key: string) => metafields.find((m) => m.key === key)?.value ?? null;
+
   return {
     ...data.product,
     images: data.product.images.nodes,
     variants: data.product.variants.nodes,
+    specs: {
+      dimensions: getMeta('dimensions'),
+      material: getMeta('material'),
+      weight: getMeta('weight'),
+      origin: getMeta('origin'),
+    },
   };
 }
 

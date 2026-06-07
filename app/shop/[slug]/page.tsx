@@ -22,7 +22,7 @@ export default async function ProductPage({
       : null;
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 pt-14 pb-40 lg:px-20">
+    <main className="min-h-screen bg-black text-white px-6 pt-14 pb-14 lg:px-20">
       <div className="max-w-5xl mx-auto">
       <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
       </div>
@@ -57,6 +57,37 @@ export default async function ProductPage({
             checkoutUrl={`https://${process.env.SHOPIFY_STORE_DOMAIN}/cart/${firstVariant?.id.split('/').pop()}:1`}
             storeDomain={process.env.SHOPIFY_STORE_DOMAIN ?? ''}
           />
+
+          {(product.specs.dimensions || product.specs.material || product.specs.weight || product.specs.origin) && (
+            <div className="mt-12">
+              <div className="flex flex-col gap-3">
+                {product.specs.dimensions && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#555] uppercase tracking-widest text-xs">Dimensions</span>
+                    <span className="text-[#888888]">{product.specs.dimensions}</span>
+                  </div>
+                )}
+                {product.specs.material && (
+                  <div className="flex justify-between text-sm border-t border-[#111] pt-3">
+                    <span className="text-[#555] uppercase tracking-widest text-xs">Material</span>
+                    <span className="text-[#888888]">{product.specs.material}</span>
+                  </div>
+                )}
+                {product.specs.weight && (
+                  <div className="flex justify-between text-sm border-t border-[#111] pt-3">
+                    <span className="text-[#555] uppercase tracking-widest text-xs">Weight</span>
+                    <span className="text-[#888888]">{product.specs.weight}</span>
+                  </div>
+                )}
+                {product.specs.origin && (
+                  <div className="flex justify-between text-sm border-t border-[#111] pt-3">
+                    <span className="text-[#555] uppercase tracking-widest text-xs">Origin</span>
+                    <span className="text-[#888888]">{product.specs.origin}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
       </div>
