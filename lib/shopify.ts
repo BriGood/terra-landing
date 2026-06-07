@@ -35,6 +35,7 @@ export type ProductVariant = {
     currencyCode: string;
   } | null;
   availableForSale: boolean;
+  selectedOptions: { name: string; value: string }[];
 };
 
 export type ProductSpecs = {
@@ -60,6 +61,7 @@ export type Product = {
   };
   variants: ProductVariant[];
   specs: ProductSpecs;
+  options: { name: string; values: string[] }[];
 };
 
 export type CollectionListItem = {
@@ -143,6 +145,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
             altText
           }
         }
+        options {
+          name
+          values
+        }
         variants(first: 20) {
           nodes {
             id
@@ -156,6 +162,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
               currencyCode
             }
             availableForSale
+            selectedOptions {
+              name
+              value
+            }
           }
         }
         metafields(identifiers: [
@@ -183,6 +193,7 @@ export async function getProduct(handle: string): Promise<Product | null> {
     ...data.product,
     images: data.product.images.nodes,
     variants: data.product.variants.nodes,
+    options: data.product.options,
     specs: {
       dimensions: getMeta('dimensions'),
       material: getMeta('material'),

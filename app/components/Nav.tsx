@@ -48,8 +48,8 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
             src="/Branding/Terra_Stacked%20Text%20Only.svg"
             alt=""
             width={120}
-            height={60}
-            className="block md:hidden"
+            height={120}
+            className="block md:hidden h-auto"
           />
           <Image
             src="/Branding/Terra_Text%20Only.svg"
