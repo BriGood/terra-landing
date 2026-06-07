@@ -2,16 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-function InstagramIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
+import { InstagramIcon } from './Icons';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -19,7 +10,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-[#222] mt-24 px-6 lg:px-20 py-12">
-      <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:items-start">
+      <div className="grid grid-cols-2 gap-10 lg:flex lg:flex-row lg:justify-between lg:items-start">
 
         {/* Nav links */}
         <div className="flex flex-col gap-3">
@@ -39,7 +30,7 @@ export default function Footer() {
         </div>
 
         {/* Socials + copyright */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 col-span-2 lg:col-span-1">
           <p className="text-xs uppercase tracking-widest text-[#555]">Follow</p>
           <a
             href="https://www.instagram.com/terrafieldworks"

@@ -16,12 +16,12 @@ export default function ContactPage() {
           <p className="text-[#888888] text-sm mb-3 leading-relaxed">
             Product inquiries, order questions, shipping, and troubleshooting.
           </p>
-          <p className="text-xs uppercase tracking-widest text-[#555] mb-6">Response within 1–2 business days</p>
+          <p className="text-xs uppercase tracking-widest text-[#555] mb-3">Response within 1–2 business days</p>
           <a
             href="mailto:support@terrafieldworks.com"
-            className="text-sm uppercase tracking-widest text-white border border-white px-6 py-3 inline-block hover:bg-white hover:text-black transition-colors"
+            className="text-sm uppercase tracking-widest text-white border border-white px-6 py-3 block text-center hover:bg-white hover:text-black transition-colors"
           >
-            support@terrafieldworks.com
+            Send Email
           </a>
         </div>
 
@@ -32,12 +32,12 @@ export default function ContactPage() {
           <p className="text-[#888888] text-sm mb-3 leading-relaxed">
             Submit a warranty claim for any Terra Fieldworks product.
           </p>
-          <p className="text-xs uppercase tracking-widest text-[#555] mb-6">Response within 1–2 business days</p>
+          <p className="text-xs uppercase tracking-widest text-[#555] mb-3">Response within 1–2 business days</p>
           <a
             href="mailto:warranty@terrafieldworks.com"
-            className="text-sm uppercase tracking-widest text-white border border-white px-6 py-3 inline-block hover:bg-white hover:text-black transition-colors"
+            className="text-sm uppercase tracking-widest text-white border border-white px-6 py-3 block text-center hover:bg-white hover:text-black transition-colors"
           >
-            warranty@terrafieldworks.com
+            Send Email
           </a>
         </div>
 
