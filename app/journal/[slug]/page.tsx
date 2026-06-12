@@ -1,3 +1,27 @@
+import type { Metadata } from 'next';
+
+// Journal posts aren't wired to a data source yet — derive a readable title from
+// the slug for now. Replace with real post data (title/excerpt) once available.
+function titleFromSlug(slug: string): string {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const title = titleFromSlug(slug);
+  return {
+    title,
+    alternates: { canonical: `/journal/${slug}` },
+  };
+}
+
 export default async function JournalPostPage({
   params,
 }: {

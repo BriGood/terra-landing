@@ -1,9 +1,17 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, formatPrice } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Shop',
+  description:
+    'Shop rugged tools, gear, and everyday carry from Terra Fieldworks — engineered for the field.',
+  alternates: { canonical: '/shop' },
+};
 
 export default async function ShopPage() {
   const products = await getProducts();
