@@ -5,6 +5,7 @@ export type ProductListItem = {
   title: string;
   handle: string;
   vendor: string;
+  availableForSale: boolean;
   priceRange: {
     minVariantPrice: {
       amount: string;
@@ -62,6 +63,7 @@ export type Product = {
   variants: ProductVariant[];
   specs: ProductSpecs;
   options: { name: string; values: string[] }[];
+  seo: { title: string | null; description: string | null };
 };
 
 export type CollectionListItem = {
@@ -96,6 +98,7 @@ export async function getProducts(): Promise<ProductListItem[]> {
           title
           handle
           vendor
+          availableForSale
           priceRange {
             minVariantPrice {
               amount
@@ -133,6 +136,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
         vendor
         description
         descriptionHtml
+        seo {
+          title
+          description
+        }
         priceRange {
           minVariantPrice {
             amount

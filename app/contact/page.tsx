@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description:
+    'Get in touch with Terra Fieldworks for product questions, orders, shipping, and warranty support.',
+  alternates: { canonical: '/contact' },
+};
 
 export default function ContactPage() {
   return (

@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'Terra Fieldworks is an everyday carry and field gear brand built on one idea: the best tool is the one you actually use. User driven, purpose built.',
+  alternates: { canonical: '/about' },
+};
 
 export default function AboutPage() {
   return (

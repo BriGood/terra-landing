@@ -1,8 +1,53 @@
+import { cache } from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProduct } from '@/lib/shopify';
+import { SITE_URL } from '@/lib/site';
 import ProductImageCarousel from '@/app/components/ProductImageCarousel';
 import VariantSelector from '@/app/components/VariantSelector';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
+
+// Deduped so generateMetadata and the page share a single Shopify request per render.
+const loadProduct = cache(getProduct);
+
+function metaDescription(product: { seo: { description: string | null }; description: string }): string {
+  const text = product.seo.description || product.description || '';
+  return text.length > 160 ? `${text.slice(0, 157).trimEnd()}…` : text;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await loadProduct(slug);
+
+  if (!product) return { title: 'Product Not Found' };
+
+  const title = product.seo.title || product.title;
+  const description = metaDescription(product);
+  const images = product.images[0]?.url ? [product.images[0].url] : undefined;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/shop/${product.handle}` },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/shop/${product.handle}`,
+      type: 'website',
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images,
+    },
+  };
+}
 
 export default async function ProductPage({
   params,
@@ -10,12 +55,37 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await getProduct(slug);
+  const product = await loadProduct(slug);
 
   if (!product) notFound();
 
+  const inStock = product.variants.some((v) => v.availableForSale);
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.images.map((img) => img.url),
+    ...(product.vendor ? { brand: { '@type': 'Brand', name: product.vendor } } : {}),
+    offers: {
+      '@type': 'Offer',
+      url: `${SITE_URL}/shop/${product.handle}`,
+      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+      price: product.priceRange.minVariantPrice.amount,
+      availability: inStock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+    },
+  };
+
   return (
     <main className="min-h-screen bg-black text-white px-6 pt-14 pb-14 lg:px-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <div className="max-w-5xl mx-auto">
         <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
       </div>

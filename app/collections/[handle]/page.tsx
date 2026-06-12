@@ -1,3 +1,5 @@
+import { cache } from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,13 +8,38 @@ import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
 
+// Deduped so generateMetadata and the page share a single Shopify request per render.
+const loadCollection = cache(getCollection);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ handle: string }>;
+}): Promise<Metadata> {
+  const { handle } = await params;
+  const collection = await loadCollection(handle);
+
+  if (!collection) return { title: 'Collection Not Found' };
+
+  const description =
+    collection.description ||
+    `Shop the ${collection.title} collection from Terra Fieldworks.`;
+
+  return {
+    title: collection.title,
+    description,
+    alternates: { canonical: `/collections/${collection.handle}` },
+    openGraph: { title: collection.title, description, type: 'website' },
+  };
+}
+
 export default async function CollectionPage({
   params,
 }: {
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const collection = await getCollection(handle);
+  const collection = await loadCollection(handle);
 
   if (!collection) notFound();
 
