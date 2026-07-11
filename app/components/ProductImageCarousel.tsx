@@ -12,12 +12,17 @@ export default function ProductImageCarousel({ images, title }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!zoomed) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoomed(false); };
+    // Jump the lightbox carousel to the current image on open (no smooth scroll).
+    const container = lightboxRef.current;
+    if (container) container.scrollLeft = container.clientWidth * activeIndex;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeLightbox(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomed]);
 
   function scrollTo(index: number) {
@@ -32,6 +37,29 @@ export default function ProductImageCarousel({ images, title }: Props) {
     if (!container) return;
     const index = Math.round(container.scrollLeft / container.clientWidth);
     setActiveIndex(index);
+  }
+
+  function scrollLightboxTo(index: number) {
+    const container = lightboxRef.current;
+    if (!container) return;
+    container.scrollTo({ left: container.clientWidth * index, behavior: 'smooth' });
+    setActiveIndex(index);
+  }
+
+  function onLightboxScroll() {
+    const container = lightboxRef.current;
+    if (!container) return;
+    setActiveIndex(Math.round(container.scrollLeft / container.clientWidth));
+  }
+
+  function closeLightbox() {
+    const lb = lightboxRef.current;
+    const idx = lb ? Math.round(lb.scrollLeft / lb.clientWidth) : activeIndex;
+    setActiveIndex(idx);
+    // Keep the mobile scroll carousel in sync with wherever the lightbox left off.
+    const main = scrollRef.current;
+    if (main) main.scrollLeft = main.clientWidth * idx;
+    setZoomed(false);
   }
 
   if (images.length === 0) {
@@ -144,40 +172,50 @@ export default function ProductImageCarousel({ images, title }: Props) {
 
       {/* Lightbox */}
       {zoomed && (
-        <div
-          onClick={() => setZoomed(false)}
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center cursor-zoom-out"
-        >
+        <div className="fixed inset-0 z-50 bg-black/95">
           <button
-            onClick={() => setZoomed(false)}
+            onClick={closeLightbox}
             className="absolute top-5 right-5 z-10 text-white text-2xl w-10 h-10 flex items-center justify-center hover:text-[#888] transition-colors cursor-pointer"
             aria-label="Close"
           >
             ✕
           </button>
+          <div
+            ref={lightboxRef}
+            onScroll={onLightboxScroll}
+            className="flex h-full w-full overflow-x-scroll snap-x snap-mandatory overscroll-contain"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {images.map((image, i) => (
+              <div
+                key={i}
+                onClick={closeLightbox}
+                className="relative flex-none w-full h-full snap-center cursor-zoom-out"
+              >
+                <Image
+                  src={image.url}
+                  alt={image.altText ?? title}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </div>
+            ))}
+          </div>
           {images.length > 1 && (
             <>
               <button
-                onClick={(e) => { e.stopPropagation(); prev(); }}
+                onClick={() => scrollLightboxTo((activeIndex - 1 + images.length) % images.length)}
                 className="absolute left-5 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white w-10 h-10 flex items-center justify-center text-2xl transition-colors cursor-pointer"
                 aria-label="Previous"
               >‹</button>
               <button
-                onClick={(e) => { e.stopPropagation(); next(); }}
+                onClick={() => scrollLightboxTo((activeIndex + 1) % images.length)}
                 className="absolute right-5 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white w-10 h-10 flex items-center justify-center text-2xl transition-colors cursor-pointer"
                 aria-label="Next"
               >›</button>
             </>
           )}
-          <div className="relative w-full h-full max-h-[95vh] mx-2">
-            <Image
-              src={images[activeIndex].url}
-              alt={images[activeIndex].altText ?? title}
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
-          </div>
         </div>
       )}
     </>
