@@ -5,19 +5,26 @@ import AddToCart from './AddToCart';
 import { formatPrice } from '@/lib/shopify';
 import type { ProductVariant } from '@/lib/shopify';
 
+// Fallback swatch hexes for colors that have no native swatch set in Shopify.
+// Shopify's swatch (product.colorSwatches) is the source of truth; this only
+// covers brand-specific names Shopify can't guess. Anything missing from both
+// still renders with a neutral swatch — colors are never dropped.
 const COLOR_MAP: Record<string, string> = {
-  black:  '#1c1c1c',
-  tan:    '#c4a882',
-  od:     '#4a5240',
+  black:        '#1c1c1c',
+  'matte black': '#1c1c1c',
+  tan:          '#c4a882',
+  od:           '#4a5240',
 };
+const FALLBACK_SWATCH = '#3a3a3a';
 
 type Props = {
   variants: ProductVariant[];
   storeDomain: string;
   productTitle: string;
+  colorSwatches?: Record<string, { color: string | null; image: string | null }>;
 };
 
-export default function VariantSelector({ variants, storeDomain, productTitle }: Props) {
+export default function VariantSelector({ variants, storeDomain, productTitle, colorSwatches = {} }: Props) {
   const [selectedId, setSelectedId] = useState(variants[0]?.id ?? '');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyState, setNotifyState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -73,9 +80,15 @@ export default function VariantSelector({ variants, storeDomain, productTitle }:
           <div className="flex flex-wrap gap-3">
             {variants.map((v) => {
               const color = v.selectedOptions.find((o) => o.name === 'Color')?.value ?? '';
-              const hex = COLOR_MAP[color.toLowerCase()];
+              if (!color) return null;
+              const swatch = colorSwatches[color.toLowerCase()];
+              // Shopify swatch wins; then brand fallback map; then a neutral swatch
+              // so a color is never dropped just because it lacks a hex.
+              const hex = swatch?.color ?? COLOR_MAP[color.toLowerCase()] ?? FALLBACK_SWATCH;
+              const style = swatch?.image
+                ? { backgroundImage: `url(${swatch.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                : { backgroundColor: hex };
               const isSelected = v.id === selectedId;
-              if (!hex) return null;
               return (
                 <button
                   key={v.id}
@@ -86,7 +99,7 @@ export default function VariantSelector({ variants, storeDomain, productTitle }:
                     ${isSelected ? 'ring-2 ring-white' : 'ring-1 ring-[#444] hover:ring-white'}
                     ${!v.availableForSale ? 'opacity-40' : ''}
                   `}
-                  style={{ backgroundColor: hex }}
+                  style={style}
                 />
               );
             })}
@@ -106,7 +119,7 @@ export default function VariantSelector({ variants, storeDomain, productTitle }:
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-widest text-[#555]">Out of Stock</p>
           {notifyState === 'success' ? (
-            <p className="text-xs uppercase tracking-widest text-[#888888]">We'll email you when it's back.</p>
+            <p className="text-xs uppercase tracking-widest text-[#888888]">We&apos;ll email you when it&apos;s back.</p>
           ) : (
             <form onSubmit={handleNotify} className="flex flex-col gap-3">
               <input

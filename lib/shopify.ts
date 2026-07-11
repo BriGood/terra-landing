@@ -63,6 +63,10 @@ export type Product = {
   variants: ProductVariant[];
   specs: ProductSpecs;
   options: { name: string; values: string[] }[];
+  // Native Shopify swatches for the "Color" option, keyed by lowercased value
+  // (e.g. "black"). Merchant-controlled in admin, so new colors flow through
+  // automatically without code changes. `color` is a hex; `image` an optional swatch photo.
+  colorSwatches: Record<string, { color: string | null; image: string | null }>;
   seo: { title: string | null; description: string | null };
 };
 
@@ -154,7 +158,15 @@ export async function getProduct(handle: string): Promise<Product | null> {
         }
         options {
           name
-          values
+          optionValues {
+            name
+            swatch {
+              color
+              image {
+                ... on MediaImage { image { url } }
+              }
+            }
+          }
         }
         variants(first: 20) {
           nodes {
@@ -196,11 +208,27 @@ export async function getProduct(handle: string): Promise<Product | null> {
   const metafields: { key: string; value: string }[] = data.product.metafields?.filter(Boolean) ?? [];
   const getMeta = (key: string) => metafields.find((m) => m.key === key)?.value ?? null;
 
+  type RawOptionValue = {
+    name: string;
+    swatch: { color: string | null; image: { image: { url: string } | null } | null } | null;
+  };
+  type RawOption = { name: string; optionValues: RawOptionValue[] };
+  const rawOptions: RawOption[] = data.product.options ?? [];
+
+  const colorSwatches: Record<string, { color: string | null; image: string | null }> = {};
+  for (const ov of rawOptions.find((o) => o.name === 'Color')?.optionValues ?? []) {
+    colorSwatches[ov.name.toLowerCase()] = {
+      color: ov.swatch?.color ?? null,
+      image: ov.swatch?.image?.image?.url ?? null,
+    };
+  }
+
   return {
     ...data.product,
     images: data.product.images.nodes,
     variants: data.product.variants.nodes,
-    options: data.product.options,
+    options: rawOptions.map((o) => ({ name: o.name, values: o.optionValues.map((v) => v.name) })),
+    colorSwatches,
     specs: {
       dimensions: getMeta('dimensions'),
       material: getMeta('material'),
