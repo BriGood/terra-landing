@@ -105,6 +105,7 @@ export default async function ProductPage({
             variants={product.variants}
             storeDomain={process.env.SHOPIFY_STORE_DOMAIN ?? ''}
             productTitle={product.title}
+            colorSwatches={product.colorSwatches}
           />
 
           {product.descriptionHtml && (
