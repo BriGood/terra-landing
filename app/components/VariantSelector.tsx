@@ -21,10 +21,11 @@ type Props = {
   variants: ProductVariant[];
   storeDomain: string;
   productTitle: string;
+  productHandle: string;
   colorSwatches?: Record<string, { color: string | null; image: string | null }>;
 };
 
-export default function VariantSelector({ variants, storeDomain, productTitle, colorSwatches = {} }: Props) {
+export default function VariantSelector({ variants, storeDomain, productTitle, productHandle, colorSwatches = {} }: Props) {
   const [selectedId, setSelectedId] = useState(variants[0]?.id ?? '');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyState, setNotifyState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -50,6 +51,8 @@ export default function VariantSelector({ variants, storeDomain, productTitle, c
         body: JSON.stringify({
           email: notifyEmail,
           productTitle,
+          productHandle,
+          variantId: selected?.id,
           color: colorOption?.value,
         }),
       });
