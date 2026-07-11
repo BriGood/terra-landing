@@ -101,18 +101,18 @@ export default async function ProductPage({
             {product.title}
           </h1>
 
-          {product.descriptionHtml && (
-            <div
-              className="text-[#888888] mb-8 leading-snug [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2"
-              dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-            />
-          )}
-
           <VariantSelector
             variants={product.variants}
             storeDomain={process.env.SHOPIFY_STORE_DOMAIN ?? ''}
             productTitle={product.title}
           />
+
+          {product.descriptionHtml && (
+            <div
+              className="text-[#888888] mt-8 leading-snug [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2"
+              dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+            />
+          )}
 
           {(product.specs.dimensions || product.specs.material || product.specs.weight || product.specs.origin) && (
             <div className="mt-12">
