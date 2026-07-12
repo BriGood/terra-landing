@@ -1,14 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-
-// Validates structure: local@domain.tld — no spaces, has @, domain has a dot, TLD is 2+ chars.
-// Deliberately lenient on character set; the only authoritative check is a confirmation email.
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { isValidEmail } from '@/lib/email';
 
 function validate(value: string): string | null {
   if (!value.trim()) return 'Email address is required.';
-  if (!EMAIL_RE.test(value.trim())) return 'Please enter a valid email address.';
+  if (!isValidEmail(value)) return 'Please enter a valid email address.';
   return null;
 }
 
