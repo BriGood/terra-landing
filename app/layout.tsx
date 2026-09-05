@@ -35,6 +35,21 @@ export const metadata: Metadata = {
     title: "Terra Fieldworks — Rugged Tools & Everyday Carry Gear",
     description: DESCRIPTION,
   },
+  // max-image-preview:large raises the ceiling on preview size — Google still
+  // picks whether and which image to show. Without it the default is a small
+  // "standard" thumbnail, and the page is ineligible for Google Discover's
+  // large-image cards. The snippet/video caps are lifted for the same reason.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default async function RootLayout({
@@ -55,6 +70,9 @@ export default async function RootLayout({
     url: SITE_URL,
     logo: `${SITE_URL}/Branding/Terra_Round%20Logo%20Only.svg`,
     description: DESCRIPTION,
+    // Ties this domain to the profiles the brand owns, so search engines resolve
+    // them to one entity instead of guessing between similarly named businesses.
+    sameAs: ["https://www.instagram.com/terrafieldworks"],
   };
 
   return (

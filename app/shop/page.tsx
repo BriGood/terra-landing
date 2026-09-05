@@ -37,9 +37,11 @@ export default async function ShopPage() {
                 />
               )}
             </div>
-            <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
             <h2 className="font-bold uppercase tracking-tight mb-1">{product.title}</h2>
-            <div className="flex items-center gap-2">
+            {product.productType && (
+              <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.productType}</p>
+            )}
+            <div className="mt-auto flex items-center gap-2">
               <p className="text-white">
                 {formatPrice(
                   product.priceRange.minVariantPrice.amount,

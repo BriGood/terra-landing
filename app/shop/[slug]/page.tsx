@@ -97,9 +97,16 @@ export default async function ProductPage({
         {/* Details */}
         <div className="flex flex-col">
           <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
-          <h1 className="text-3xl font-extrabold uppercase tracking-widest mb-4">
-            {product.title}
-          </h1>
+          <div className="mb-4">
+            <h1 className="text-3xl font-extrabold uppercase tracking-widest">
+              {product.title}
+            </h1>
+            {product.productType && (
+              <p className="mt-1 text-sm uppercase tracking-widest text-[#888888]">
+                {product.productType}
+              </p>
+            )}
+          </div>
 
           <VariantSelector
             variants={product.variants}

@@ -33,7 +33,7 @@ export default function Home() {
           <p className="text-[#888888] text-lg mb-8 max-w-sm">
             Innovative tools, gear, and everyday carry — engineered for the field.
           </p>
-          <p className="text-white text-sm uppercase tracking-widest mb-3">Coming Summer &apos;26. Stay in the know.</p>
+          <p className="text-white text-sm uppercase tracking-widest mb-3">Coming Sept &apos;26. Stay in the know.</p>
           <EmailForm />
         </div>
 

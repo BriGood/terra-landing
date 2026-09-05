@@ -3,8 +3,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getCollection, formatPrice } from '@/lib/shopify';
+import { getCollection, formatPrice, isHiddenCollection } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
+import FitHeading from '@/app/components/FitHeading';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,8 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
+  if (isHiddenCollection(handle)) return { title: 'Collection Not Found' };
+
   const collection = await loadCollection(handle);
 
   if (!collection) return { title: 'Collection Not Found' };
@@ -39,6 +42,10 @@ export default async function CollectionPage({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
+  // Curation-only collections aren't browsable categories. notFound() also emits
+  // noindex, so the route can't be indexed as a duplicate of /shop.
+  if (isHiddenCollection(handle)) notFound();
+
   const collection = await loadCollection(handle);
 
   if (!collection) notFound();
@@ -46,10 +53,20 @@ export default async function CollectionPage({
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
       <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'ShØp', href: '/shop' }, { label: collection.title }]} />
-      <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-2">{collection.title}</h1>
-      {collection.description && (
-        <p className="text-[#888888] mb-12">{collection.description}</p>
-      )}
+      {/* The mb-12 lives on the wrapper, not the description — collections without
+          one would otherwise collapse to the title's own margin and sit tighter to
+          the grid than /shop does. */}
+      {/* Inline-size container so the heading's pre-hydration estimate can size
+          itself against this box rather than the viewport. */}
+      <div className="mb-12 [container-type:inline-size]">
+        <FitHeading
+          text={collection.title}
+          className="font-extrabold uppercase tracking-tight leading-none"
+        />
+        {collection.description && (
+          <p className="text-[#888888] mt-2">{collection.description}</p>
+        )}
+      </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
         {collection.products.map((product) => (
           <Link
@@ -67,9 +84,11 @@ export default async function CollectionPage({
                 />
               )}
             </div>
-            <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
             <h2 className="font-bold uppercase tracking-tight mb-1">{product.title}</h2>
-            <div className="flex items-center gap-2">
+            {product.productType && (
+              <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.productType}</p>
+            )}
+            <div className="mt-auto flex items-center gap-2">
               <p className="text-white">
                 {formatPrice(
                   product.priceRange.minVariantPrice.amount,

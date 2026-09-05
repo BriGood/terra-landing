@@ -2,13 +2,15 @@ import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { SITE_URL } from '@/lib/site';
+import { isValidEmail } from '@/lib/email';
 
 const OWNER_EMAIL = 'support@terrafieldworks.com';
 const FROM = 'Terra Fieldworks <noreply@terrafieldworks.com>';
 
 // Guard against HTML injection when interpolating values (esp. user-supplied email) into email bodies.
-function esc(value: string): string {
-  return value
+// Takes unknown and coerces: a caller sending a non-string field shouldn't blow up the handler.
+function esc(value: unknown): string {
+  return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
   try {
     const { email, productTitle, productHandle, variantId, color } = await request.json();
 
-    if (!email || !productTitle || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!isValidEmail(email) || typeof productTitle !== 'string' || !productTitle.trim()) {
       return NextResponse.json({ error: 'A valid email and product are required.' }, { status: 400 });
     }
 

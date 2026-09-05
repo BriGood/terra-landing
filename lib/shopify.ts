@@ -5,6 +5,7 @@ export type ProductListItem = {
   title: string;
   handle: string;
   vendor: string;
+  productType: string | null;
   availableForSale: boolean;
   priceRange: {
     minVariantPrice: {
@@ -51,6 +52,7 @@ export type Product = {
   title: string;
   handle: string;
   vendor: string;
+  productType: string | null;
   description: string;
   descriptionHtml: string;
   images: { url: string; altText: string | null }[];
@@ -84,6 +86,29 @@ export type Collection = {
   products: ProductListItem[];
 };
 
+// Curation-only collections. They must stay published to the Storefront sales
+// channel for getCollection() to read them, so they're hidden in code rather
+// than in Shopify: getCollections() — which feeds both the nav and the sitemap —
+// filters them out, while getCollection(handle) still fetches them by name.
+export const FEATURED_COLLECTION_HANDLE = 'featured';
+
+const HIDDEN_COLLECTION_HANDLES = new Set<string>([FEATURED_COLLECTION_HANDLE]);
+
+export function isHiddenCollection(handle: string): boolean {
+  return HIDDEN_COLLECTION_HANDLES.has(handle);
+}
+
+// Shopify's Product.productType is a non-null String that comes back as "" when
+// the merchant hasn't set one, so blanks collapse to null at the boundary and
+// callers only ever branch on null.
+function normalizeProductType(value: string | null | undefined): string | null {
+  return value?.trim() || null;
+}
+
+function normalizeListItem(node: ProductListItem): ProductListItem {
+  return { ...node, productType: normalizeProductType(node.productType) };
+}
+
 function getClient() {
   return createStorefrontApiClient({
     storeDomain: process.env.SHOPIFY_STORE_DOMAIN!,
@@ -102,6 +127,7 @@ export async function getProducts(): Promise<ProductListItem[]> {
           title
           handle
           vendor
+          productType
           availableForSale
           priceRange {
             minVariantPrice {
@@ -125,7 +151,7 @@ export async function getProducts(): Promise<ProductListItem[]> {
   `);
 
   if (errors) throw new Error(errors.message);
-  return data.products.nodes;
+  return (data.products.nodes as ProductListItem[]).map(normalizeListItem);
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
@@ -138,6 +164,7 @@ export async function getProduct(handle: string): Promise<Product | null> {
         title
         handle
         vendor
+        productType
         description
         descriptionHtml
         seo {
@@ -225,6 +252,7 @@ export async function getProduct(handle: string): Promise<Product | null> {
 
   return {
     ...data.product,
+    productType: normalizeProductType(data.product.productType),
     images: data.product.images.nodes,
     variants: data.product.variants.nodes,
     options: rawOptions.map((o) => ({ name: o.name, values: o.optionValues.map((v) => v.name) })),
@@ -391,7 +419,9 @@ export async function getCollections(): Promise<CollectionListItem[]> {
       }
     `);
     if (errors) return [];
-    return data.collections.nodes;
+    return (data.collections.nodes as CollectionListItem[]).filter(
+      (c) => !isHiddenCollection(c.handle)
+    );
   } catch {
     return [];
   }
@@ -413,6 +443,8 @@ export async function getCollection(handle: string): Promise<Collection | null> 
             title
             handle
             vendor
+            productType
+            availableForSale
             priceRange {
               minVariantPrice { amount currencyCode }
             }
@@ -431,7 +463,7 @@ export async function getCollection(handle: string): Promise<Collection | null> 
   if (!data.collection) return null;
   return {
     ...data.collection,
-    products: data.collection.products.nodes,
+    products: (data.collection.products.nodes as ProductListItem[]).map(normalizeListItem),
   };
 }
 
