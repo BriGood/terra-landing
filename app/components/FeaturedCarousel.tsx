@@ -8,22 +8,34 @@ import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
 export default function FeaturedCarousel({ products }: { products: ProductListItem[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState(0);
-  const [pageCount, setPageCount] = useState(1);
+  const [index, setIndex] = useState(0);
+  const [stopCount, setStopCount] = useState(1);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+
+  // Width of one card slot. Cards have an exact 1/2 (mobile) or 1/4 (desktop)
+  // basis with no flex gap, so slots tile the track edge to edge.
+  function slotWidth(el: HTMLDivElement): number {
+    return (el.firstElementChild as HTMLElement | null)?.getBoundingClientRect().width ?? 0;
+  }
 
   const sync = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    // Cards have exact 1/2 (mobile) or 1/4 (desktop) basis with no flex gap,
-    // so one viewport width equals one page of products.
+    const slot = slotWidth(el);
     const maxScroll = el.scrollWidth - el.clientWidth;
-    setPageCount(Math.max(1, Math.ceil((el.scrollWidth - 1) / el.clientWidth)));
-    setPage(Math.round(el.scrollLeft / el.clientWidth));
+    // The track snaps per card (snap-start on every slide), so every card
+    // position is a real stop — not every screenful. Counting stops by the
+    // screenful made a half-swipe light the last dot while products were still
+    // off-screen. The final stop is the one that pulls the last card flush with
+    // the right edge, hence products - visible + 1.
+    const visible = slot > 0 ? Math.round(el.clientWidth / slot) : 1;
+    const stops = Math.max(1, products.length - visible + 1);
+    setStopCount(stops);
+    setIndex(slot > 0 ? Math.min(stops - 1, Math.round(el.scrollLeft / slot)) : 0);
     setAtStart(el.scrollLeft <= 1);
     setAtEnd(el.scrollLeft >= maxScroll - 1);
-  }, []);
+  }, [products.length]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -37,17 +49,18 @@ export default function FeaturedCarousel({ products }: { products: ProductListIt
     };
   }, [sync]);
 
-  // Relative scroll — robust against snap/rounding drift in the page index.
-  function scrollByPage(dir: -1 | 1) {
+  // Relative scroll — robust against snap/rounding drift in the index. Steps one
+  // card so the arrows land on the same stops the dots advertise.
+  function scrollByCard(dir: -1 | 1) {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' });
+    el.scrollBy({ left: dir * slotWidth(el), behavior: 'smooth' });
   }
 
-  function goToPage(p: number) {
+  function goToStop(i: number) {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollTo({ left: el.clientWidth * p, behavior: 'smooth' });
+    el.scrollTo({ left: slotWidth(el) * i, behavior: 'smooth' });
   }
 
   return (
@@ -55,8 +68,8 @@ export default function FeaturedCarousel({ products }: { products: ProductListIt
       {/* Arrows — desktop only; mobile uses swipe + dots */}
       <button
         type="button"
-        aria-label="Previous products"
-        onClick={() => scrollByPage(-1)}
+        aria-label="Previous product"
+        onClick={() => scrollByCard(-1)}
         disabled={atStart}
         className="hidden lg:flex absolute left-0 top-[38%] -translate-y-1/2 -translate-x-1/2 z-10 h-12 w-12 items-center justify-center bg-[#1a1a1a] text-white hover:bg-[#2a2a2a] transition-colors disabled:opacity-30 disabled:pointer-events-none"
       >
@@ -64,8 +77,8 @@ export default function FeaturedCarousel({ products }: { products: ProductListIt
       </button>
       <button
         type="button"
-        aria-label="Next products"
-        onClick={() => scrollByPage(1)}
+        aria-label="Next product"
+        onClick={() => scrollByCard(1)}
         disabled={atEnd}
         className="hidden lg:flex absolute right-0 top-[38%] -translate-y-1/2 translate-x-1/2 z-10 h-12 w-12 items-center justify-center bg-[#1a1a1a] text-white hover:bg-[#2a2a2a] transition-colors disabled:opacity-30 disabled:pointer-events-none"
       >
@@ -120,17 +133,17 @@ export default function FeaturedCarousel({ products }: { products: ProductListIt
         ))}
       </div>
 
-      {/* Pagination dots */}
-      {pageCount > 1 && (
+      {/* Position dots — one per card stop, not per screenful */}
+      {stopCount > 1 && (
         <div className="flex justify-center gap-2 mt-10">
-          {Array.from({ length: pageCount }).map((_, i) => (
+          {Array.from({ length: stopCount }).map((_, i) => (
             <button
               key={i}
               type="button"
-              aria-label={`Go to page ${i + 1}`}
-              onClick={() => goToPage(i)}
+              aria-label={`Go to product ${i + 1}`}
+              onClick={() => goToStop(i)}
               className={`h-2 w-2 rounded-full transition-colors ${
-                i === page ? 'bg-white' : 'bg-[#444] hover:bg-[#666]'
+                i === index ? 'bg-white' : 'bg-[#444] hover:bg-[#666]'
               }`}
             />
           ))}
