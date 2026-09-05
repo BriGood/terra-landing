@@ -94,12 +94,11 @@ export default function FeaturedCarousel({ products }: { products: ProductListIt
                 />
               )}
             </div>
-            <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.vendor}</p>
             <h3 className="font-bold uppercase tracking-tight mb-1">{product.title}</h3>
             {product.productType && (
               <p className="text-xs uppercase tracking-widest text-[#888888] mb-1">{product.productType}</p>
             )}
-            <div className="flex items-center gap-2">
+            <div className="mt-auto flex items-center gap-2">
               <p className="text-white">
                 {formatPrice(
                   product.priceRange.minVariantPrice.amount,
