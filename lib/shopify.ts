@@ -86,6 +86,18 @@ export type Collection = {
   products: ProductListItem[];
 };
 
+// Curation-only collections. They must stay published to the Storefront sales
+// channel for getCollection() to read them, so they're hidden in code rather
+// than in Shopify: getCollections() — which feeds both the nav and the sitemap —
+// filters them out, while getCollection(handle) still fetches them by name.
+export const FEATURED_COLLECTION_HANDLE = 'featured';
+
+const HIDDEN_COLLECTION_HANDLES = new Set<string>([FEATURED_COLLECTION_HANDLE]);
+
+export function isHiddenCollection(handle: string): boolean {
+  return HIDDEN_COLLECTION_HANDLES.has(handle);
+}
+
 // Shopify's Product.productType is a non-null String that comes back as "" when
 // the merchant hasn't set one, so blanks collapse to null at the boundary and
 // callers only ever branch on null.
@@ -407,7 +419,9 @@ export async function getCollections(): Promise<CollectionListItem[]> {
       }
     `);
     if (errors) return [];
-    return data.collections.nodes;
+    return (data.collections.nodes as CollectionListItem[]).filter(
+      (c) => !isHiddenCollection(c.handle)
+    );
   } catch {
     return [];
   }
@@ -430,6 +444,7 @@ export async function getCollection(handle: string): Promise<Collection | null> 
             handle
             vendor
             productType
+            availableForSale
             priceRange {
               minVariantPrice { amount currencyCode }
             }

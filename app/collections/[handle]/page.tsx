@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getCollection, formatPrice } from '@/lib/shopify';
+import { getCollection, formatPrice, isHiddenCollection } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
@@ -17,6 +17,8 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
+  if (isHiddenCollection(handle)) return { title: 'Collection Not Found' };
+
   const collection = await loadCollection(handle);
 
   if (!collection) return { title: 'Collection Not Found' };
@@ -39,6 +41,10 @@ export default async function CollectionPage({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
+  // Curation-only collections aren't browsable categories. notFound() also emits
+  // noindex, so the route can't be indexed as a duplicate of /shop.
+  if (isHiddenCollection(handle)) notFound();
+
   const collection = await loadCollection(handle);
 
   if (!collection) notFound();

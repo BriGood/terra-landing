@@ -1,12 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProducts } from '@/lib/shopify';
+import { getProducts, getCollection, FEATURED_COLLECTION_HANDLE } from '@/lib/shopify';
 import FeaturedCarousel from '@/app/components/FeaturedCarousel';
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const products = await getProducts();
+  // Which products are featured, and in what order, is curated in Shopify (the
+  // hidden "Featured" collection, manual sort) so it can be changed in admin
+  // without a deploy. Falls back to the full catalog if that collection is
+  // missing or empty, so the carousel is never blank.
+  const featured = await getCollection(FEATURED_COLLECTION_HANDLE).catch(() => null);
+  const products = featured?.products.length ? featured.products : await getProducts();
 
   return (
     <main className="bg-black text-white">
