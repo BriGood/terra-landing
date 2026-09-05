@@ -52,10 +52,15 @@ export default async function CollectionPage({
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
       <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'ShØp', href: '/shop' }, { label: collection.title }]} />
-      <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-2">{collection.title}</h1>
-      {collection.description && (
-        <p className="text-[#888888] mb-12">{collection.description}</p>
-      )}
+      {/* The mb-12 lives on the wrapper, not the description — collections without
+          one would otherwise collapse to the title's own margin and sit tighter to
+          the grid than /shop does. */}
+      <div className="mb-12">
+        <h1 className="text-4xl font-extrabold uppercase tracking-tight">{collection.title}</h1>
+        {collection.description && (
+          <p className="text-[#888888] mt-2">{collection.description}</p>
+        )}
+      </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
         {collection.products.map((product) => (
           <Link
