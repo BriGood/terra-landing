@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getCollection, formatPrice, isHiddenCollection } from '@/lib/shopify';
 import Breadcrumbs from '@/app/components/Breadcrumbs';
+import FitHeading from '@/app/components/FitHeading';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,8 +56,13 @@ export default async function CollectionPage({
       {/* The mb-12 lives on the wrapper, not the description — collections without
           one would otherwise collapse to the title's own margin and sit tighter to
           the grid than /shop does. */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-extrabold uppercase tracking-tight">{collection.title}</h1>
+      {/* Inline-size container so the heading's pre-hydration estimate can size
+          itself against this box rather than the viewport. */}
+      <div className="mb-12 [container-type:inline-size]">
+        <FitHeading
+          text={collection.title}
+          className="font-extrabold uppercase tracking-tight leading-none"
+        />
         {collection.description && (
           <p className="text-[#888888] mt-2">{collection.description}</p>
         )}
