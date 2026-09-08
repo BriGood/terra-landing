@@ -159,58 +159,85 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
             )}
           </Link>
           <button
-            className="text-white text-[28px] leading-none w-8 flex items-center justify-center"
+            className="text-white w-8 h-8 flex flex-col items-center justify-center gap-[5px] cursor-pointer"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
-            {mobileOpen ? '✕' : '☰'}
+            {/* Three bars that fold into an X. The outer bars travel one bar
+                plus one gap (7px) to meet in the middle before rotating. */}
+            <span
+              className={`block h-[2px] w-6 bg-current transition-transform duration-300 ease-out motion-reduce:transition-none ${
+                mobileOpen ? 'translate-y-[7px] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`block h-[2px] w-6 bg-current transition-opacity duration-200 ease-out motion-reduce:transition-none ${
+                mobileOpen ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <span
+              className={`block h-[2px] w-6 bg-current transition-transform duration-300 ease-out motion-reduce:transition-none ${
+                mobileOpen ? '-translate-y-[7px] -rotate-45' : ''
+              }`}
+            />
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-black border-t border-[#222] px-6 py-6 flex flex-col gap-4">
-          <Link
-            href="/home"
-            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            HØme
-          </Link>
-          <Link
-            href="/shop"
-            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            ShØp
-          </Link>
-          {sortedCollections.map((c) => (
+      {/* Mobile menu. Kept mounted so it can animate both ways; the 0fr -> 1fr
+          grid row expands to the real content height without hardcoding one. */}
+      <div
+        id="mobile-menu"
+        inert={!mobileOpen}
+        className={`md:hidden grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+          mobileOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+      >
+        <div className="min-h-0">
+          <div className="bg-black border-t border-[#222] px-6 py-6 flex flex-col gap-4">
             <Link
-              key={c.id}
-              href={`/collections/${c.handle}`}
-              className="text-xs uppercase tracking-widest text-[#555] hover:text-white transition-colors pl-3"
+              href="/home"
+              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
               onClick={() => setMobileOpen(false)}
             >
-              {c.title}
+              HØme
             </Link>
-          ))}
-          <Link
-            href="/about"
-            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            AbØut
-          </Link>
-          <Link
-            href="/contact"
-            className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            CØntact
-          </Link>
+            <Link
+              href="/shop"
+              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              ShØp
+            </Link>
+            {sortedCollections.map((c) => (
+              <Link
+                key={c.id}
+                href={`/collections/${c.handle}`}
+                className="text-xs uppercase tracking-widest text-[#555] hover:text-white transition-colors pl-3"
+                onClick={() => setMobileOpen(false)}
+              >
+                {c.title}
+              </Link>
+            ))}
+            <Link
+              href="/about"
+              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              AbØut
+            </Link>
+            <Link
+              href="/contact"
+              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              CØntact
+            </Link>
+          </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

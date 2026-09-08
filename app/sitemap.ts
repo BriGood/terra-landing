@@ -32,16 +32,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }));
 
-  // Only advertise products that are actually for sale, so unfinished/draft items
-  // aren't surfaced to crawlers before launch.
-  const productRoutes: MetadataRoute.Sitemap = products
-    .filter((p) => p.availableForSale)
-    .map((p) => ({
-      url: `${SITE_URL}/shop/${p.handle}`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }));
+  // Everything the Storefront API returns is already published to this sales
+  // channel — drafts and unpublished products never come back from it — so the
+  // list is safe to advertise in full. Out-of-stock products stay in: their pages
+  // are 200, canonical and indexable, they carry accurate schema.org/OutOfStock
+  // availability, and they capture demand through notify-me while restocking.
+  // Dropping them from the sitemap only slowed discovery; it never protected
+  // anything. In-stock products keep the higher priority so they stay the
+  // stronger signal.
+  const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
+    url: `${SITE_URL}/shop/${p.handle}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: p.availableForSale ? 0.8 : 0.6,
+  }));
 
   const collectionRoutes: MetadataRoute.Sitemap = collections.map((c) => ({
     url: `${SITE_URL}/collections/${c.handle}`,
