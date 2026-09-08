@@ -57,11 +57,17 @@ export default function ProductImageCarousel({ images, title }: Props) {
     setActiveIndex(index);
   }
 
-  function onScroll() {
-    const container = scrollRef.current;
-    if (!container) return;
+  // Derive the visible slide from a scroll container. A zero clientWidth (a
+  // display:none or collapsed container) would make the division NaN and index
+  // past the end of `images`, so fall back to the current slide instead.
+  function indexFromScroll(container: HTMLDivElement | null, fallback: number) {
+    if (!container || container.clientWidth === 0) return fallback;
     const index = Math.round(container.scrollLeft / container.clientWidth);
-    setActiveIndex(index);
+    return Math.max(0, Math.min(index, images.length - 1));
+  }
+
+  function onScroll() {
+    setActiveIndex(indexFromScroll(scrollRef.current, activeIndex));
   }
 
   function scrollLightboxTo(index: number) {
@@ -72,14 +78,11 @@ export default function ProductImageCarousel({ images, title }: Props) {
   }
 
   function onLightboxScroll() {
-    const container = lightboxRef.current;
-    if (!container) return;
-    setActiveIndex(Math.round(container.scrollLeft / container.clientWidth));
+    setActiveIndex(indexFromScroll(lightboxRef.current, activeIndex));
   }
 
   function closeLightbox() {
-    const lb = lightboxRef.current;
-    const idx = lb ? Math.round(lb.scrollLeft / lb.clientWidth) : activeIndex;
+    const idx = indexFromScroll(lightboxRef.current, activeIndex);
     setActiveIndex(idx);
     // Keep the mobile scroll carousel in sync with wherever the lightbox left off.
     const main = scrollRef.current;
