@@ -19,9 +19,34 @@ export default function ProductImageCarousel({ images, title }: Props) {
     // Jump the lightbox carousel to the current image on open (no smooth scroll).
     const container = lightboxRef.current;
     if (container) container.scrollLeft = container.clientWidth * activeIndex;
+
+    // Lock the page behind the lightbox. position:fixed is the only lock iOS
+    // Safari honours for touch scrolling — overflow:hidden alone still lets the
+    // background scroll. The offset is restored when the lightbox closes.
+    const { body } = document;
+    const scrollY = window.scrollY;
+    const gutter = window.innerWidth - document.documentElement.clientWidth;
+    const restore = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      paddingRight: body.style.paddingRight,
+    };
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.width = '100%';
+    if (gutter > 0) body.style.paddingRight = `${gutter}px`;
+
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeLightbox(); };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      body.style.position = restore.position;
+      body.style.top = restore.top;
+      body.style.width = restore.width;
+      body.style.paddingRight = restore.paddingRight;
+      window.scrollTo(0, scrollY);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomed]);
 
