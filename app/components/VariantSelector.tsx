@@ -77,8 +77,8 @@ export default function VariantSelector({ variants, storeDomain, productTitle, p
       {/* Color selector */}
       {hasColors && (
         <div className="flex flex-col gap-3">
-          <p className="text-xs uppercase tracking-widest text-[#555] mb-2">
-            Color — <span className="text-white">{colorOption?.value}</span>
+          <p className="text-xs uppercase tracking-widest text-white mb-2">
+            Color — {colorOption?.value}
           </p>
           <div className="flex flex-wrap gap-3">
             {variants.map((v) => {
