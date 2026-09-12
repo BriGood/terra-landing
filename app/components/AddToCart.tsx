@@ -57,19 +57,52 @@ export default function AddToCart({ merchandiseId, availableForSale, checkoutUrl
   const { addToCart, loading } = useCart();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // threshold 0 flips the moment the block's last pixel — the bottom of
-        // the Shop Pay button — leaves the viewport, rather than waiting for
-        // half the block to clear. The boundingClientRect check restricts that
-        // to scrolling off the TOP: without it the bar would also show while
-        // the block is still below the fold, i.e. on first load.
-        setShowSticky(!entry.isIntersecting && entry.boundingClientRect.top < 0);
-      },
-      { threshold: 0 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+    const target = sectionRef.current;
+    if (!target) return;
+
+    // Two bars are pinned to the top of the viewport — the nav, and the
+    // breadcrumb strip below it — so the buying block leaves *view* once it
+    // slides under them, ~130px before it reaches y=0. Measured rather than
+    // hardcoded so it keeps up if either bar changes height.
+    function topInset() {
+      let bottom = 0;
+      document.querySelectorAll('nav').forEach((el) => {
+        if (getComputedStyle(el).position !== 'fixed') return;
+        const rect = el.getBoundingClientRect();
+        // Pinned near the top of the viewport. The breadcrumb strip starts at
+        // y=96, below the nav's own height, so the test is "starts high on the
+        // screen" rather than anything relative to the element's own box.
+        if (rect.top >= 0 && rect.top < window.innerHeight / 3) {
+          bottom = Math.max(bottom, rect.bottom);
+        }
+      });
+      return bottom;
+    }
+
+    let frame = 0;
+
+    // A direct geometric test rather than an IntersectionObserver. The observer
+    // only fires when an intersection threshold is *crossed*, so jumping from
+    // deep in the page straight back to the top — scroll restoration, a jump
+    // link — never re-fires when the block is below the fold both before and
+    // after, leaving the bar stuck on screen.
+    function update() {
+      frame = 0;
+      setShowSticky(target!.getBoundingClientRect().bottom <= topInset());
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
   }, []);
 
   async function handleAddToCart() {
