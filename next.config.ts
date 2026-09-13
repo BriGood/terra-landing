@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // The storefront lived at /home until launch. Permanent so the old URL
+      // consolidates onto "/" rather than lingering as a second copy.
+      { source: '/home', destination: '/', permanent: true },
+    ];
+  },
   images: {
     // Shopify's CDN handles resizing (?width=) and format negotiation (WebP/AVIF),
     // so we bypass the Next optimizer entirely. See lib/shopify-image-loader.ts for why.

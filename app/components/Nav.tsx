@@ -24,7 +24,7 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
   const [shopOpen, setShopOpen] = useState(false);
   const { itemCount } = useCart();
 
-  if (pathname === '/') return null;
+  if (pathname === '/coming-soon') return null;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-[#222]">
@@ -63,9 +63,9 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href="/home"
+            href="/"
             className={`text-xs uppercase tracking-widest transition-colors ${
-              pathname === '/home' ? 'text-white' : 'text-[#888888] hover:text-white'
+              pathname === '/' ? 'text-white' : 'text-[#888888] hover:text-white'
             }`}
           >
             HØme
@@ -198,7 +198,7 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
         <div className="min-h-0">
           <div className="bg-black border-t border-[#222] px-6 py-6 flex flex-col gap-4">
             <Link
-              href="/home"
+              href="/"
               className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
               onClick={() => setMobileOpen(false)}
             >

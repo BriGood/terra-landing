@@ -40,7 +40,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ handle:
 
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: policy.title }]} />
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: policy.title }]} />
 
       <div className="max-w-3xl">
         <h1 className="text-2xl font-extrabold uppercase tracking-tight mb-10">
