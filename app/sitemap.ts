@@ -16,8 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Public, indexable routes. Excludes /cart and /order/* (user-specific) and the
   // /api/* handlers — those are also blocked in robots.ts.
-  // Note: /home (the storefront) is intentionally excluded — "/" is the canonical
-  // homepage. At launch, /home will redirect to "/" (which becomes the storefront).
+  // /home now 308s to "/", and /coming-soon is noindex, so neither belongs here.
   const staticRoutes: MetadataRoute.Sitemap = [
     { path: '/', priority: 1 },
     { path: '/shop', priority: 0.8 },

@@ -1,56 +1,65 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import EmailForm from './components/EmailForm';
-import HeroSlideshow from './components/HeroSlideshow';
+import Link from 'next/link';
+import { getProducts, getCollection, FEATURED_COLLECTION_HANDLE } from '@/lib/shopify';
+import FeaturedCarousel from '@/app/components/FeaturedCarousel';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-black text-white">
-      <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+export default async function HomePage() {
+  // Which products are featured, and in what order, is curated in Shopify (the
+  // hidden "Featured" collection, manual sort) so it can be changed in admin
+  // without a deploy. Falls back to the full catalog if that collection is
+  // missing or empty, so the carousel is never blank.
+  const featured = await getCollection(FEATURED_COLLECTION_HANDLE).catch(() => null);
+  const products = featured?.products.length ? featured.products : await getProducts();
 
-        {/* Left column: text + CTA — second on mobile, first on desktop */}
-        <div className="flex flex-col items-start justify-start lg:justify-center px-6 pt-6 pb-6 lg:py-24 lg:px-20 order-last lg:order-first">
-          {/*
-            Inline SVG with viewBox starting at x=0.776 (where the "T" glyph begins
-            in the source file) so the left edge of "T" sits at exactly x=0 of this
-            element — no Image wrapper, no SVG-internal whitespace offset.
-          */}
-          <Image
-            src="/Branding/Terra_Text%20Only.svg"
-            alt="Terra Fieldworks"
-            width={406}
-            height={18}
-            className="mb-8 block ml-[3px]"
-          />
-          <h1 className="text-4xl lg:text-7xl font-extrabold uppercase tracking-tight leading-none mb-6 whitespace-nowrap">
-            <span className="block mb-2">User Driven.</span>
+  return (
+    <main className="bg-black text-white">
+
+      {/* Hero — full-width banner with text overlay */}
+      <section className="relative w-full h-[25vh] lg:h-[42vh] overflow-hidden">
+        <Image
+          src="/Branding/HomeBanner.jpg"
+          alt="Terra Fieldworks"
+          fill
+          className="object-cover object-[58%_40%] lg:object-[center_48%]"
+          priority
+          quality={85}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-6 lg:px-20">
+          <h1 className="text-[2.5rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
+            <span className="block">User Driven.</span>
             <span className="block">Purpose Built.</span>
           </h1>
-          <p className="text-[#888888] text-lg mb-8 max-w-sm">
-            Innovative tools, gear, and everyday carry — engineered for the field.
-          </p>
-          <p className="text-white text-sm uppercase tracking-widest mb-3">Coming Sept &apos;26. Stay in the know.</p>
-          <EmailForm />
         </div>
-
-        {/* Right column: product image — first on mobile, second on desktop */}
-        <div className="relative min-h-[29vh] lg:min-h-0 overflow-hidden order-first lg:order-last bg-black">
-          <HeroSlideshow />
-          <div className="absolute top-6 right-6 z-10">
-            <Image
-              src="/Branding/Terra_Round%20Logo%20Only.svg"
-              alt="Terra Fieldworks"
-              width={128}
-              height={128}
-            />
-          </div>
-        </div>
-
       </section>
+
+
+      {/* Featured Products */}
+      {products.length > 0 && (
+        <section className="px-6 pt-8 pb-16 lg:px-20 lg:pt-10 border-t border-[#222]">
+          <h2 className="text-2xl font-extrabold uppercase tracking-tight text-center mb-8">
+            Featured Products
+          </h2>
+          <FeaturedCarousel products={products} />
+          <div className="flex justify-center mt-8">
+            <Link
+              href="/shop"
+              className="text-xs uppercase tracking-widest text-[#888888] hover:text-white transition-colors"
+            >
+              View All →
+            </Link>
+          </div>
+        </section>
+      )}
+
     </main>
   );
 }

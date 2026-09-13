@@ -86,10 +86,18 @@ export default async function ProductPage({
           __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
         }}
       />
-      <div className="max-w-5xl mx-auto">
-        <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
+      <div className="max-w-6xl mx-auto">
+        <Breadcrumbs
+          crumbs={[
+            { label: 'ShØp', href: '/shop' },
+            ...(product.primaryCollection
+              ? [{ label: product.primaryCollection.title, href: `/collections/${product.primaryCollection.handle}` }]
+              : []),
+            { label: product.title },
+          ]}
+        />
       </div>
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-12">
 
         {/* Images */}
         <ProductImageCarousel images={product.images} title={product.title} />

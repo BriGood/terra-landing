@@ -12,7 +12,7 @@ export default function CartPage() {
   if (itemCount === 0) {
     return (
       <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'Cart' }]} />
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'Cart' }]} />
         <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">Cart</h1>
         <p className="text-[#888888] mb-6">Your cart is empty.</p>
         <Link
@@ -27,7 +27,7 @@ export default function CartPage() {
 
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/home' }, { label: 'Cart' }]} />
+      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'Cart' }]} />
       <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">Cart</h1>
 
       <div className="max-w-3xl flex flex-col gap-8">

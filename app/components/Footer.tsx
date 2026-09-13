@@ -6,7 +6,7 @@ import { InstagramIcon } from './Icons';
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname === '/') return null;
+  if (pathname === '/coming-soon') return null;
 
   return (
     <footer className="border-t border-[#222] mt-24 px-6 lg:px-20 py-12">

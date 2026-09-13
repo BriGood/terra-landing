@@ -18,7 +18,7 @@ export default async function ShopPage() {
 
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp' }]} />
+      <Breadcrumbs crumbs={[{ label: 'ShØp' }]} />
       <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">ShØp</h1>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
         {products.map((product) => (
