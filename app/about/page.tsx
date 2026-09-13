@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'AbØut' }]} />
 
       {/* Hero */}
       <div className="max-w-3xl mb-10">

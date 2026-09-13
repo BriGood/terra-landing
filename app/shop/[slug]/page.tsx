@@ -87,7 +87,15 @@ export default async function ProductPage({
         }}
       />
       <div className="max-w-6xl mx-auto">
-        <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: product.title }]} />
+        <Breadcrumbs
+          crumbs={[
+            { label: 'ShØp', href: '/shop' },
+            ...(product.primaryCollection
+              ? [{ label: product.primaryCollection.title, href: `/collections/${product.primaryCollection.handle}` }]
+              : []),
+            { label: product.title },
+          ]}
+        />
       </div>
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-12">
 

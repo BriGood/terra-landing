@@ -69,6 +69,9 @@ export type Product = {
   // (e.g. "black"). Merchant-controlled in admin, so new colors flow through
   // automatically without code changes. `color` is a hex; `image` an optional swatch photo.
   colorSwatches: Record<string, { color: string | null; image: string | null }>;
+  // Category for the breadcrumb trail. Curation-only collections are skipped so
+  // the trail never exposes one; null when the product isn't in a public one.
+  primaryCollection: { title: string; handle: string } | null;
   seo: { title: string | null; description: string | null };
 };
 
@@ -183,6 +186,12 @@ export async function getProduct(handle: string): Promise<Product | null> {
             altText
           }
         }
+        collections(first: 10) {
+          nodes {
+            title
+            handle
+          }
+        }
         options {
           name
           optionValues {
@@ -250,8 +259,11 @@ export async function getProduct(handle: string): Promise<Product | null> {
     };
   }
 
+  const rawCollections: { title: string; handle: string }[] = data.product.collections?.nodes ?? [];
+
   return {
     ...data.product,
+    primaryCollection: rawCollections.find((c) => !isHiddenCollection(c.handle)) ?? null,
     productType: normalizeProductType(data.product.productType),
     images: data.product.images.nodes,
     variants: data.product.variants.nodes,

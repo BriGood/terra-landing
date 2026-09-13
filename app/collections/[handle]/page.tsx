@@ -52,7 +52,7 @@ export default async function CollectionPage({
 
   return (
     <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: 'ShØp', href: '/shop' }, { label: collection.title }]} />
+      <Breadcrumbs crumbs={[{ label: 'ShØp', href: '/shop' }, { label: collection.title }]} />
       {/* The mb-12 lives on the wrapper, not the description — collections without
           one would otherwise collapse to the title's own margin and sit tighter to
           the grid than /shop does. */}
