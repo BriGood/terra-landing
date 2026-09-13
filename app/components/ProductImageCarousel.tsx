@@ -162,7 +162,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
               fill
               className="object-cover transition-opacity duration-200"
               priority
-              sizes="50vw"
+              sizes="(min-width: 1024px) 600px, 100vw"
             />
             {images.length > 1 && (
               <>
