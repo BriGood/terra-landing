@@ -68,7 +68,10 @@ export default async function RootLayout({
     "@type": "Organization",
     name: "Terra Fieldworks",
     url: SITE_URL,
-    logo: `${SITE_URL}/Branding/Terra_Round%20Logo%20Only.svg`,
+    // Raster, not the SVG the site itself uses: search engines render this logo
+    // against light backgrounds, and the mark is pure white, so it needs the
+    // brand-black plate baked in to stay legible.
+    logo: `${SITE_URL}/Branding/terra-logo-512.png`,
     description: DESCRIPTION,
     // Ties this domain to the profiles the brand owns, so search engines resolve
     // them to one entity instead of guessing between similarly named businesses.
