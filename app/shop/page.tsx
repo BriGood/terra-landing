@@ -51,12 +51,12 @@ export default async function ShopPage() {
               {product.compareAtPriceRange?.minVariantPrice &&
                 parseFloat(product.compareAtPriceRange.minVariantPrice.amount) >
                 parseFloat(product.priceRange.minVariantPrice.amount) && (
-                <p className="text-[#888888] line-through text-sm">
+                <span data-nosnippet="" className="text-[#888888] line-through text-sm">
                   {formatPrice(
                     product.compareAtPriceRange.minVariantPrice.amount,
                     product.compareAtPriceRange.minVariantPrice.currencyCode
                   )}
-                </p>
+                </span>
               )}
             </div>
           </Link>
