@@ -278,6 +278,96 @@ export async function getProduct(handle: string): Promise<Product | null> {
   };
 }
 
+export type FeedVariant = {
+  id: string;
+  title: string;
+  sku: string | null;
+  availableForSale: boolean;
+  price: { amount: string; currencyCode: string };
+  compareAtPrice: { amount: string; currencyCode: string } | null;
+  selectedOptions: { name: string; value: string }[];
+  weight: number | null;
+  weightUnit: string | null;
+};
+
+export type FeedProduct = {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  productType: string | null;
+  vendor: string;
+  images: { url: string; altText: string | null }[];
+  variants: FeedVariant[];
+};
+
+// Every product published to this sales channel, following cursor pagination to
+// the end. The rest of the app caps at `first: 50`; a feed that silently dropped
+// products past that ceiling would be worse than one that failed loudly.
+export async function getAllProductsForFeed(): Promise<FeedProduct[]> {
+  const client = getClient();
+  const all: FeedProduct[] = [];
+  let cursor: string | null = null;
+
+  for (let page = 0; page < 20; page++) {
+    const { data, errors } = await client.request(
+      `
+      query FeedProducts($cursor: String) {
+        products(first: 50, after: $cursor) {
+          pageInfo { hasNextPage endCursor }
+          nodes {
+            id
+            title
+            handle
+            description
+            productType
+            vendor
+            images(first: 10) { nodes { url altText } }
+            variants(first: 100) {
+              nodes {
+                id
+                title
+                sku
+                availableForSale
+                price { amount currencyCode }
+                compareAtPrice { amount currencyCode }
+                selectedOptions { name value }
+                weight
+                weightUnit
+              }
+            }
+          }
+        }
+      }
+    `,
+      { variables: { cursor } }
+    );
+
+    if (errors) throw new Error(errors.message);
+
+    type RawNode = Omit<FeedProduct, 'images' | 'variants' | 'productType'> & {
+      productType: string;
+      images: { nodes: { url: string; altText: string | null }[] };
+      variants: { nodes: FeedVariant[] };
+    };
+    const conn = data.products as { pageInfo: { hasNextPage: boolean; endCursor: string }; nodes: RawNode[] };
+
+    for (const node of conn.nodes) {
+      all.push({
+        ...node,
+        productType: normalizeProductType(node.productType),
+        images: node.images.nodes,
+        variants: node.variants.nodes,
+      });
+    }
+
+    if (!conn.pageInfo.hasNextPage) return all;
+    cursor = conn.pageInfo.endCursor;
+  }
+
+  return all;
+}
+
 export type CartLine = {
   id: string;
   quantity: number;
