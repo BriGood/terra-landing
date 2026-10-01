@@ -70,7 +70,7 @@ export default function VariantSelector({ variants, storeDomain, productTitle, p
       <div className="flex items-center gap-3">
         <p className="text-2xl font-bold">{price}</p>
         {compareAtPrice && (
-          <p className="text-lg text-[#888888] line-through">{compareAtPrice}</p>
+          <span data-nosnippet="" className="text-lg text-[#888888] line-through">{compareAtPrice}</span>
         )}
       </div>
 
