@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -36,7 +37,16 @@ export default function AboutPage() {
           <p className="text-xs uppercase tracking-widest text-[#888888] mb-4">Our Promise</p>
           <h2 className="text-2xl font-extrabold uppercase tracking-tight mb-4">Lifetime Guarantee</h2>
           <p className="text-[#888888] leading-relaxed">
-            Every original Terra Fieldworks product is backed by a lifetime guarantee. If anything goes wrong, even if it&apos;s your fault, we&apos;ll make it right. We stand behind what we build.
+            Every original Terra Fieldworks product is backed by a{' '}
+            {/* First inline prose link on the site. Underlined rather than colour-shifted:
+                in a grey paragraph a colour-only link is invisible until hover. */}
+            <Link
+              href="/policies/refund-policy"
+              className="underline underline-offset-4 decoration-[#555] hover:text-white hover:decoration-white transition-colors"
+            >
+              lifetime guarantee
+            </Link>
+            . If anything goes wrong, even if it&apos;s your fault, we&apos;ll make it right. We stand behind what we build.
           </p>
         </div>
 

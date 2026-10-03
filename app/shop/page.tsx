@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, formatPrice } from '@/lib/shopify';
-import Breadcrumbs from '@/app/components/Breadcrumbs';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,8 +16,7 @@ export default async function ShopPage() {
   const products = await getProducts();
 
   return (
-    <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'ShØp' }]} />
+    <main className="bg-black text-white px-6 pt-6 pb-24 lg:px-20">
       <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-12">ShØp</h1>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
         {products.map((product) => (
