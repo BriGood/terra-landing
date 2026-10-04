@@ -54,7 +54,7 @@ export default async function HomePage() {
             src="/Branding/Hero_Desktop.jpg"
             alt="Terra Fieldworks"
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover object-bottom md:object-center"
+            className="absolute inset-0 h-full w-full object-cover object-bottom"
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
