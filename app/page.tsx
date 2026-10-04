@@ -75,7 +75,7 @@ export default async function HomePage() {
 
       {/* Featured Products */}
       {products.length > 0 && (
-        <section className="px-6 pt-8 pb-16 lg:px-20 lg:pt-10 border-t border-[#222]">
+        <section className="px-6 pt-8 pb-16 lg:px-20 lg:pt-10">
           <h2 className="text-2xl font-extrabold uppercase tracking-tight text-center mb-8">
             Featured Products
           </h2>
