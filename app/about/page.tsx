@@ -18,13 +18,7 @@ export default function AboutPage() {
           Solutions Designed for the Field.
         </h1>
         <p className="text-[#888888] leading-relaxed">
-          Terra Fieldworks is an everyday carry and field gear brand built around one idea: the best tool is the one you actually use. Every product we make is designed from the ground up for real-world performance.
-        </p>
-        {/* The brand line, kept as a sign-off now that the heading carries the
-            positioning statement. White and spaced so it reads as a statement
-            rather than a continuation of the paragraph. */}
-        <p className="text-sm uppercase tracking-widest text-white mt-6">
-          User Driven. Purpose Built.
+          Terra Fieldworks is an everyday carry and field gear brand built around one idea: the best tool is the one you actually use. Every product we make is designed from the ground up for real-world performance. User driven. Purpose built.
         </p>
       </div>
 
