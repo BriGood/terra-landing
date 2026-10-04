@@ -20,8 +20,9 @@ const OUT = 'public/Branding/responsive';
 const SOURCES = [
   // Desktop art direction, shown at >=768px. 2560/3000 cover 2x laptops.
   { src: 'public/Branding/Hero_Desktop.jpg', name: 'hero-desktop', widths: [1280, 1920, 2560, 3000] },
-  // Mobile art direction, shown below 768px. 1200 covers a 390px phone at 3x.
-  { src: 'public/Branding/Hero_Mobile.jpg', name: 'hero-mobile', widths: [640, 828, 1200] },
+  // Mobile art direction, shown below 768px. 1000 is the source width, so that
+  // is the ceiling — a 390px phone at 3x wants 1170 and gets the native 1000.
+  { src: 'public/Branding/Hero_Mobile.jpg', name: 'hero-mobile', widths: [500, 750, 1000] },
 ];
 
 // AVIF carries this image far better than WebP does (measured on the previous

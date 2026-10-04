@@ -31,13 +31,13 @@ export default async function HomePage() {
           <source
             media="(max-width: 767px)"
             type="image/avif"
-            srcSet="/Branding/responsive/hero-mobile-640.avif 640w, /Branding/responsive/hero-mobile-828.avif 828w, /Branding/responsive/hero-mobile-1200.avif 1200w"
+            srcSet="/Branding/responsive/hero-mobile-500.avif 500w, /Branding/responsive/hero-mobile-750.avif 750w, /Branding/responsive/hero-mobile-1000.avif 1000w"
             sizes="100vw"
           />
           <source
             media="(max-width: 767px)"
             type="image/webp"
-            srcSet="/Branding/responsive/hero-mobile-640.webp 640w, /Branding/responsive/hero-mobile-828.webp 828w, /Branding/responsive/hero-mobile-1200.webp 1200w"
+            srcSet="/Branding/responsive/hero-mobile-500.webp 500w, /Branding/responsive/hero-mobile-750.webp 750w, /Branding/responsive/hero-mobile-1000.webp 1000w"
             sizes="100vw"
           />
           <source
