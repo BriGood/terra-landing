@@ -27,14 +27,14 @@ export default async function HomePage() {
           src="/Branding/HomeBanner.jpg"
           alt="Terra Fieldworks"
           fill
-          className="object-cover object-[58%_40%] lg:object-[center_48%]"
+          className="object-cover object-[79%_50%] lg:object-[center_48%]"
           priority
           quality={85}
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
-          <h1 className="text-[2.5rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
+          <h1 className="text-[2rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">User Driven.</span>
             <span className="block">Purpose Built.</span>
           </h1>
