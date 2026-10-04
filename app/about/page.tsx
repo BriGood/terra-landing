@@ -15,7 +15,7 @@ export default function AboutPage() {
       {/* Hero */}
       <div className="max-w-3xl mb-10">
         <h1 className="text-2xl font-extrabold uppercase tracking-tight mb-6">
-          Solutions for the Field.
+          Solutions for the Field
         </h1>
         <p className="text-[#888888] leading-relaxed">
           Terra Fieldworks is an everyday carry and field gear brand built around one idea: the best tool is the one you actually use. Every product we make is designed from the ground up to solve real problems. User driven. Purpose built.
