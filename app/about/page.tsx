@@ -18,7 +18,7 @@ export default function AboutPage() {
           Solutions Designed for the Field.
         </h1>
         <p className="text-[#888888] leading-relaxed">
-          Terra Fieldworks is an everyday carry and field gear brand built around one idea: the best tool is the one you actually use. Every product we make is designed from the ground up for real-world performance. User driven. Purpose built.
+          Terra Fieldworks is an everyday carry and field gear brand built around one idea: the best tool is the one you actually use. Every product we make is designed from the ground up to solve real problems. User driven. Purpose built.
         </p>
       </div>
 
