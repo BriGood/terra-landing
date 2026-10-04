@@ -22,7 +22,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[25vh] lg:h-[42vh] overflow-hidden">
+      <section className="relative w-full h-[38vh] lg:h-[52vh] overflow-hidden">
         <Image
           src="/Branding/HomeBanner.jpg"
           alt="Terra Fieldworks"
@@ -33,11 +33,17 @@ export default async function HomePage() {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 flex items-center px-6 lg:px-20">
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
           <h1 className="text-[2.5rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">User Driven.</span>
             <span className="block">Purpose Built.</span>
           </h1>
+          <Link
+            href="/shop"
+            className="inline-block bg-white text-black text-xs lg:text-sm font-bold uppercase tracking-widest px-7 py-3 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
+          >
+            Shop the Collection
+          </Link>
         </div>
       </section>
 
