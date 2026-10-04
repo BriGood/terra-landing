@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, getCollection, FEATURED_COLLECTION_HANDLE } from '@/lib/shopify';
 import FeaturedCarousel from '@/app/components/FeaturedCarousel';
@@ -23,15 +22,41 @@ export default async function HomePage() {
 
       {/* Hero — full-width banner with text overlay */}
       <section className="relative w-full h-[38vh] lg:h-[52vh] overflow-hidden">
-        <Image
-          src="/Branding/HomeBanner.jpg"
-          alt="Terra Fieldworks"
-          fill
-          className="object-cover object-[79%_50%] lg:object-[center_48%]"
-          priority
-          quality={85}
-          sizes="100vw"
-        />
+        {/* Hand-written <picture> rather than next/image: this needs art
+            direction (a different crop below 768px), which next/image cannot
+            express, and the variants are pre-built by `npm run images` anyway
+            since nothing optimises local assets at request time. AVIF first,
+            WebP for the rest, JPEG master as the last resort. */}
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet="/Branding/responsive/hero-mobile-640.avif 640w, /Branding/responsive/hero-mobile-828.avif 828w, /Branding/responsive/hero-mobile-1200.avif 1200w"
+            sizes="100vw"
+          />
+          <source
+            media="(max-width: 767px)"
+            type="image/webp"
+            srcSet="/Branding/responsive/hero-mobile-640.webp 640w, /Branding/responsive/hero-mobile-828.webp 828w, /Branding/responsive/hero-mobile-1200.webp 1200w"
+            sizes="100vw"
+          />
+          <source
+            type="image/avif"
+            srcSet="/Branding/responsive/hero-desktop-1280.avif 1280w, /Branding/responsive/hero-desktop-1920.avif 1920w, /Branding/responsive/hero-desktop-2560.avif 2560w, /Branding/responsive/hero-desktop-3000.avif 3000w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet="/Branding/responsive/hero-desktop-1280.webp 1280w, /Branding/responsive/hero-desktop-1920.webp 1920w, /Branding/responsive/hero-desktop-2560.webp 2560w, /Branding/responsive/hero-desktop-3000.webp 3000w"
+            sizes="100vw"
+          />
+          <img
+            src="/Branding/Hero_Desktop.jpg"
+            alt="Terra Fieldworks"
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
           <h1 className="text-[2rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
