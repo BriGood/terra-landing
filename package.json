@@ -9,7 +9,8 @@
     "lint": "eslint",
     "build:cf": "opennextjs-cloudflare build",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "preview:cf": "opennextjs-cloudflare build && wrangler dev"
+    "preview:cf": "opennextjs-cloudflare build && wrangler dev",
+    "images": "node scripts/generate-hero-images.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.6",
@@ -27,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "wrangler": "^4.92.0"

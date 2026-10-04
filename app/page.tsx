@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, getCollection, FEATURED_COLLECTION_HANDLE } from '@/lib/shopify';
 import FeaturedCarousel from '@/app/components/FeaturedCarousel';
@@ -22,29 +21,61 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[25vh] lg:h-[42vh] overflow-hidden">
-        <Image
-          src="/Branding/HomeBanner.jpg"
-          alt="Terra Fieldworks"
-          fill
-          className="object-cover object-[58%_40%] lg:object-[center_48%]"
-          priority
-          quality={85}
-          sizes="100vw"
-        />
+      <section className="relative w-full h-[38vh] lg:h-[52vh] overflow-hidden">
+        {/* Hand-written <picture> rather than next/image: this needs art
+            direction (a different crop below 768px), which next/image cannot
+            express, and the variants are pre-built by `npm run images` anyway
+            since nothing optimises local assets at request time. AVIF first,
+            WebP for the rest, JPEG master as the last resort. */}
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet="/Branding/responsive/hero-mobile-500.avif 500w, /Branding/responsive/hero-mobile-750.avif 750w, /Branding/responsive/hero-mobile-1000.avif 1000w"
+            sizes="100vw"
+          />
+          <source
+            media="(max-width: 767px)"
+            type="image/webp"
+            srcSet="/Branding/responsive/hero-mobile-500.webp 500w, /Branding/responsive/hero-mobile-750.webp 750w, /Branding/responsive/hero-mobile-1000.webp 1000w"
+            sizes="100vw"
+          />
+          <source
+            type="image/avif"
+            srcSet="/Branding/responsive/hero-desktop-1280.avif 1280w, /Branding/responsive/hero-desktop-1920.avif 1920w, /Branding/responsive/hero-desktop-2560.avif 2560w, /Branding/responsive/hero-desktop-3000.avif 3000w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet="/Branding/responsive/hero-desktop-1280.webp 1280w, /Branding/responsive/hero-desktop-1920.webp 1920w, /Branding/responsive/hero-desktop-2560.webp 2560w, /Branding/responsive/hero-desktop-3000.webp 3000w"
+            sizes="100vw"
+          />
+          <img
+            src="/Branding/Hero_Desktop.jpg"
+            alt="Terra Fieldworks"
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-bottom"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 flex items-center px-6 lg:px-20">
-          <h1 className="text-[2.5rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
-            <span className="block">User Driven.</span>
-            <span className="block">Purpose Built.</span>
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
+          <h1 className="text-[2rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
+            <span className="block">Solutions for</span>
+            <span className="block">the Field.</span>
           </h1>
+          <Link
+            href="/shop"
+            className="inline-block bg-white text-black text-xs lg:text-sm font-bold uppercase tracking-widest px-7 py-3 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
+          >
+            Shop the Collection
+          </Link>
         </div>
       </section>
 
 
       {/* Featured Products */}
       {products.length > 0 && (
-        <section className="px-6 pt-8 pb-16 lg:px-20 lg:pt-10 border-t border-[#222]">
+        <section className="px-6 pt-8 pb-16 lg:px-20 lg:pt-10">
           <h2 className="text-2xl font-extrabold uppercase tracking-tight text-center mb-8">
             Featured Products
           </h2>

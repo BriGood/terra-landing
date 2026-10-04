@@ -8,7 +8,11 @@
 // from the `Accept` header, served from its global edge cache.
 //
 // Non-Shopify sources (local /Branding assets served by the ASSETS binding) are
-// passed through untouched.
+// passed through untouched. That is fine for the SVG logos and wordmarks, which
+// are tiny and resolution-independent. The hero is the one local image heavy
+// enough to need real variants, and it does not come through here: it needs a
+// different crop below 768px, which next/image cannot express, so it is a
+// hand-written <picture> in app/page.tsx fed by `npm run images`.
 
 type LoaderArgs = { src: string; width: number; quality?: number };
 
