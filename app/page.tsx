@@ -21,7 +21,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[38vh] lg:h-[52vh] overflow-hidden">
+      <section className="relative w-full h-[38vh] md:h-auto md:aspect-[4/1] overflow-hidden">
         {/* Hand-written <picture> rather than next/image: this needs art
             direction (a different crop below 768px), which next/image cannot
             express, and the variants are pre-built by `npm run images` anyway
@@ -51,14 +51,14 @@ export default async function HomePage() {
             sizes="100vw"
           />
           <img
-            src="/Branding/Hero_Desktop.jpg"
+            src="/Branding/Hero_Desktop_4x1.jpg"
             alt="Terra Fieldworks"
             fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover object-bottom"
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-6 px-6 lg:px-20">
           <h1 className="text-[1.75rem] lg:text-[88px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">Solutions for</span>
             <span className="block">the Field.</span>
