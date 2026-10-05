@@ -51,7 +51,7 @@ export default async function HomePage() {
             sizes="100vw"
           />
           <img
-            src="/Branding/Hero_Desktop_4x1.jpg"
+            src="/Branding/Hero_Desktop.jpg"
             alt="Terra Fieldworks"
             fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover object-bottom md:object-contain"
