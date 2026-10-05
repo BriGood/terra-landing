@@ -65,7 +65,7 @@ export default async function HomePage() {
           </h1>
           <Link
             href="/shop"
-            className="inline-block bg-white text-black text-xs lg:text-sm font-bold uppercase tracking-widest px-7 py-3 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
+            className="inline-block bg-white text-black text-[11px] lg:text-sm font-bold uppercase tracking-widest px-6 py-2.5 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
           >
             Shop the Collection
           </Link>
