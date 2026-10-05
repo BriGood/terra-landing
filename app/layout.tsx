@@ -16,6 +16,19 @@ const inter = Inter({
 const DESCRIPTION =
   "Terra Fieldworks builds rugged tools, gear, and everyday carry — engineered for the field. Rugged by design, ready for anything.";
 
+const PREVIEW_DESCRIPTION = "Innovative gear, tools, and everyday carry.";
+
+// The share card is a finished 4:5 image with the wordmark already on it, so
+// it is referenced directly rather than drawn per-request. Portrait is a
+// deliberate choice: Slack and iMessage show it whole, while X falls back to
+// its small square card and Facebook/LinkedIn centre-crop to a 1.91:1 band.
+const PREVIEW_IMAGE = {
+  url: "/Branding/home-url-preview.jpg",
+  width: 1200,
+  height: 1500,
+  alt: "A hiker wading a canyon river under the Terra Fieldworks wordmark.",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -25,15 +38,20 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   openGraph: {
     title: "Terra Fieldworks — Rugged Tools & Everyday Carry Gear",
-    description: DESCRIPTION,
+    // Link previews get their own line. DESCRIPTION is written for a search
+    // snippet, where Google wants ~150 characters; a share card shows one or
+    // two lines under the title and a long one is simply truncated.
+    description: PREVIEW_DESCRIPTION,
     siteName: "Terra Fieldworks",
     url: SITE_URL,
     type: "website",
+    images: [PREVIEW_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Terra Fieldworks — Rugged Tools & Everyday Carry Gear",
-    description: DESCRIPTION,
+    description: PREVIEW_DESCRIPTION,
+    images: [PREVIEW_IMAGE],
   },
   // max-image-preview:large raises the ceiling on preview size — Google still
   // picks whether and which image to show. Without it the default is a small
