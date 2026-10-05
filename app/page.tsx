@@ -21,7 +21,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[38vh] lg:h-[52vh] overflow-hidden">
+      <section className="relative w-full h-[38vh] md:h-auto md:aspect-[5/1] md:min-h-[264px] overflow-hidden">
         {/* Hand-written <picture> rather than next/image: this needs art
             direction (a different crop below 768px), which next/image cannot
             express, and the variants are pre-built by `npm run images` anyway
@@ -54,18 +54,21 @@ export default async function HomePage() {
             src="/Branding/Hero_Desktop.jpg"
             alt="Terra Fieldworks"
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover object-bottom"
+            className="absolute inset-0 h-full w-full object-cover object-bottom md:object-contain"
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-8 px-6 lg:px-20">
-          <h1 className="text-[2rem] lg:text-[100px] font-extrabold uppercase tracking-tight leading-none">
+        {/* Mobile crops the figure in from the bottom, so centring in the box
+            leaves the copy low over the brightest part of the frame. The bottom
+            pad lifts the centre line into the dark upper half. */}
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-6 px-6 lg:px-20 pb-20 md:pb-0">
+          <h1 className="text-[1.75rem] lg:text-[80px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">Solutions for</span>
             <span className="block">the Field.</span>
           </h1>
           <Link
             href="/shop"
-            className="inline-block bg-white text-black text-xs lg:text-sm font-bold uppercase tracking-widest px-7 py-3 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
+            className="inline-block bg-white text-black text-[11px] lg:text-sm font-bold uppercase tracking-widest px-6 py-2.5 lg:px-9 lg:py-4 hover:bg-[#d9d9d9] transition-colors"
           >
             Shop the Collection
           </Link>
