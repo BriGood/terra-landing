@@ -19,7 +19,7 @@ const OUT = 'public/Branding/responsive';
 
 const SOURCES = [
   // Desktop art direction, shown at >=768px. 2560/3000 cover 2x laptops.
-  // 5:1 master, matching the hero box above 1320px so it fills edge to edge.
+  // 3:1 master, matching the hero box so it fills edge to edge.
   { src: 'public/Branding/Hero_Desktop.jpg', name: 'hero-desktop', widths: [1280, 1920, 2560, 3000] },
   // Mobile art direction, shown below 768px. 1000 is the source width, so that
   // is the ceiling — a 390px phone at 3x wants 1170 and gets the native 1000.

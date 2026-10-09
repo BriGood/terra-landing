@@ -21,7 +21,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[38vh] md:h-auto md:aspect-[5/1] md:min-h-[264px] overflow-hidden">
+      <section className="relative w-full h-[38vh] md:h-auto md:aspect-[3/1] md:min-h-[264px] overflow-hidden">
         {/* Hand-written <picture> rather than next/image: this needs art
             direction (a different crop below 768px), which next/image cannot
             express, and the variants are pre-built by `npm run images` anyway
