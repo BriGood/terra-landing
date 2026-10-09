@@ -57,7 +57,11 @@ export default async function HomePage() {
             className="absolute inset-0 h-full w-full object-cover object-bottom md:object-contain"
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+        {/* Scrim for the headline, not a look. It stops at 55% because the
+            left of the frame is already near-black (mean 1-8 of 255 where the
+            type sits), so reaching further only dimmed the lit ground and the
+            figure — the one bright thing in the shot — by a fifth. */}
+        <div className="absolute inset-0 bg-linear-to-r from-black/65 via-black/20 via-28% to-transparent to-55%" />
         {/* Mobile crops the figure in from the bottom, so centring in the box
             leaves the copy low over the brightest part of the frame. The bottom
             pad lifts the centre line into the dark upper half. */}
