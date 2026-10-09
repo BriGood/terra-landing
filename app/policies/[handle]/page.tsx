@@ -1,7 +1,6 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Breadcrumbs from '@/app/components/Breadcrumbs';
 import { getPolicy } from '@/lib/shopify';
 
 // Deduped so generateMetadata and the page share a single Shopify request per render.
@@ -39,9 +38,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ handle:
   if (!policy) notFound();
 
   return (
-    <main className="bg-black text-white px-6 pt-14 pb-24 lg:px-20">
-      <Breadcrumbs crumbs={[{ label: 'HØme', href: '/' }, { label: policy.title }]} />
-
+    <main className="bg-black text-white px-6 pt-6 pb-24 lg:px-20">
       <div className="max-w-3xl">
         <h1 className="text-2xl font-extrabold uppercase tracking-tight mb-10">
           {policy.title}

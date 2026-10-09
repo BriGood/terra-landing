@@ -21,7 +21,7 @@ export default async function HomePage() {
     <main className="bg-black text-white">
 
       {/* Hero — full-width banner with text overlay */}
-      <section className="relative w-full h-[38vh] md:h-auto md:aspect-[5/1] md:min-h-[264px] overflow-hidden">
+      <section className="relative w-full md:mt-6 h-[38vh] md:h-auto md:aspect-[3.75/1] md:min-h-[264px] overflow-hidden">
         {/* Hand-written <picture> rather than next/image: this needs art
             direction (a different crop below 768px), which next/image cannot
             express, and the variants are pre-built by `npm run images` anyway
@@ -57,11 +57,15 @@ export default async function HomePage() {
             className="absolute inset-0 h-full w-full object-cover object-bottom md:object-contain"
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+        {/* Scrim for the headline, not a look. It stops at 55% because the
+            left of the frame is already near-black (mean 1-8 of 255 where the
+            type sits), so reaching further only dimmed the lit ground and the
+            figure — the one bright thing in the shot — by a fifth. */}
+        <div className="absolute inset-0 bg-linear-to-r from-black/65 via-black/20 via-28% to-transparent to-55%" />
         {/* Mobile crops the figure in from the bottom, so centring in the box
             leaves the copy low over the brightest part of the frame. The bottom
             pad lifts the centre line into the dark upper half. */}
-        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-6 px-6 lg:px-20 pb-20 md:pb-0">
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-10 px-6 lg:px-20 pb-20 md:pb-0">
           <h1 className="text-[1.75rem] lg:text-[80px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">Solutions for</span>
             <span className="block">the Field.</span>
