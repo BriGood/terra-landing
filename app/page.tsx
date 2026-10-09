@@ -65,7 +65,7 @@ export default async function HomePage() {
         {/* Mobile crops the figure in from the bottom, so centring in the box
             leaves the copy low over the brightest part of the frame. The bottom
             pad lifts the centre line into the dark upper half. */}
-        <div className="absolute inset-0 flex flex-col justify-center items-start gap-10 px-6 lg:px-20 pb-20 md:pb-0">
+        <div className="absolute inset-0 flex flex-col justify-center items-start gap-5 lg:gap-10 px-6 lg:px-20 pb-20 md:pb-0">
           <h1 className="text-[1.75rem] lg:text-[80px] font-extrabold uppercase tracking-tight leading-none">
             <span className="block">Solutions for</span>
             <span className="block">the Field.</span>
