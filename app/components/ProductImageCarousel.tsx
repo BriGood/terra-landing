@@ -11,6 +11,7 @@ type Props = {
 export default function ProductImageCarousel({ images, title }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [zoomed, setZoomed] = useState(false);
+  const [animate, setAnimate] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
 
@@ -94,8 +95,17 @@ export default function ProductImageCarousel({ images, title }: Props) {
     return <div className="aspect-[4/3] bg-[#111]" />;
   }
 
-  const prev = () => setActiveIndex((i) => (i - 1 + images.length) % images.length);
-  const next = () => setActiveIndex((i) => (i + 1) % images.length);
+  // Desktop slides a track rather than swapping the src. Only single-step moves
+  // animate: wrapping from the last image to the first, or jumping several
+  // thumbnails along, would otherwise sweep the whole strip past the viewer.
+  function goTo(index: number) {
+    const step = Math.abs(index - activeIndex);
+    setAnimate(step === 1);
+    setActiveIndex(index);
+  }
+
+  const prev = () => goTo((activeIndex - 1 + images.length) % images.length);
+  const next = () => goTo((activeIndex + 1) % images.length);
 
   return (
     <>
@@ -156,14 +166,26 @@ export default function ProductImageCarousel({ images, title }: Props) {
             onClick={() => setZoomed(true)}
             className="relative aspect-[4/3] bg-[#111] overflow-hidden cursor-zoom-in"
           >
-            <Image
-              src={images[activeIndex].url}
-              alt={images[activeIndex].altText ?? title}
-              fill
-              className="object-cover transition-opacity duration-200"
-              priority
-              sizes="(min-width: 1024px) 600px, 100vw"
-            />
+            {/* translateX percentages resolve against the track's own width,
+                which is one slide wide — the slides overflow it — so each step
+                is exactly one image. */}
+            <div
+              className={`flex h-full ${animate ? 'transition-transform duration-[400ms] ease-out motion-reduce:transition-none' : ''}`}
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
+              {images.map((image, i) => (
+                <div key={i} className="relative flex-none w-full h-full">
+                  <Image
+                    src={image.url}
+                    alt={image.altText ?? title}
+                    fill
+                    className="object-cover"
+                    priority={i === 0}
+                    sizes="(min-width: 1024px) 600px, 100vw"
+                  />
+                </div>
+              ))}
+            </div>
             {images.length > 1 && (
               <>
                 <button onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-10 h-10 flex items-center justify-center text-xl transition-colors cursor-pointer" aria-label="Previous">‹</button>
@@ -177,7 +199,7 @@ export default function ProductImageCarousel({ images, title }: Props) {
               {images.map((image, i) => (
                 <button
                   key={i}
-                  onClick={() => setActiveIndex(i)}
+                  onClick={() => goTo(i)}
                   className={`relative aspect-[4/3] w-16 flex-none bg-[#111] overflow-hidden border transition-colors ${
                     i === activeIndex ? 'border-white cursor-default' : 'border-transparent hover:border-[#444] cursor-pointer'
                   }`}
