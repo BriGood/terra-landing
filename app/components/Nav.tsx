@@ -77,9 +77,14 @@ export default function Nav({ collections = [] }: { collections?: CollectionList
             onMouseEnter={() => setShopOpen(true)}
             onMouseLeave={() => setShopOpen(false)}
           >
+            {/* `block` is doing real work: its siblings are direct children of
+                the flex row, so flexbox blockifies them and they take the 16px
+                line box. This one sits inside the relative wrapper that anchors
+                the dropdown, so it stays inline and its box hugs the glyphs —
+                1.3px lower than the rest. */}
             <Link
               href="/shop"
-              className={`text-xs uppercase tracking-widest transition-colors ${
+              className={`block text-xs uppercase tracking-widest transition-colors ${
                 pathname.startsWith('/shop') || pathname.startsWith('/collections')
                   ? 'text-white'
                   : 'text-[#888888] hover:text-white'
